@@ -14,7 +14,7 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-jobreferralportal_backend/.idea/    
+jobreferralportal_backend/.idea/
 .idea
 *.iws
 *.iml
