@@ -1,81 +1,77 @@
--->JOB REFERRAL PORTAL
+# JOB REFERRAL PORTAL
 
-The Job Referral Portal is a web-based application designed to facilitate the employee referral process. It allows employees to refer candidates for open positions within their company, view job postings, and track the status of their referrals. The application consists a user interface and a backend system that handles the business logic and data storage.
+Job Referral Portal is Web application that is useful to manage and simplify employee referrals in a company. The portal allows employees to refer potential candidates that they know from their personal or professional positions to relevant positions, the employees can look up available job roles and their descriptions, they also can track the status of the candidates that they have referred. HR  have the ability to manage job postings, they can update the status of the candidates and accept or reject a referrel based on company requirements.
 
--->FEATURES
+# FEATURES
 
-1. Employee login and authentication.
-2. Submit new referrals.
-3. Track the status of past referrals.
-4. View job postings.
-5. Admin(HR) view for managing job postings and reviewing referrals.
-6. Email Notifications for referral updates.
+1. Login for Employees/HR.
+2. Submit referrals for open job listings.
+3. Track status of referred candidates.
+4. View for employess to scroll through the job postings.
+5. View for HR/ Admin to review the employee referrals & add/ remove job postings.
+6. Notifications on Referral updates.
+7. Employee leaderboard based on number of referrals made.
 
--->TECHNOLOGIES USED
+# TECHNOLOGIES USED
 
 Frontend:
-Angular - Framework for building the user interface
-Bootstrap - For responsive UI components
-HTML/CSS - Markup and styling
+Angular 
+Bootstrap 
+HTML/CSS 
 
-Backend
-Java - Backend logic and API creation
-Spring Boot - Framework for building the backend services
-Oracle - Database used for storing referral and job data
-Maven - Dependency management
-RESTful API - For communication between the frontend and backend
+Backend:
+Java 
+Spring Boot 
+Oracle
+Maven 
+RESTful API 
 
--->DIRECTORY STRUCTURE
+# DIRECTORY STRUCTURE
 
-Frontend File Structure:
+...
+├───jobreferralportal_backend
+│   ├───.mvn
+│   │   └───wrapper
+│   └───src
+│       ├───main
+│       │   ├───java
+│       │   │   └───com
+│       │   │       └───innovators
+│       │   │           └───jobreferralportal
+│       │   │               ├───controller
+│       │   │               ├───entity
+│       │   │               └───repository
+│       │   └───resources
+│       └───test
+│           └───java
+│               └───com
+│                   └───innovators
+│                       └───jobreferralportal
+├───jobreferralportal_frontend
+│   ├───.vscode
+│   ├───public
+│   └───src
+│       └───app
+└───planning_documents
+...
 
-jobreferralportal_frontend/
-│
-├── .vscode/             # VSCode workspace configuration
-├── public/              # Static assets (images, icons, etc.)
-├── src/                 # Application source code
-│   ├── app/             # Main Angular application components
-│   ├── assets/          # Application assets (styles, images)
-│   ├── environments/    # Environment configurations (dev/prod)
-│   └── index.html       # Entry point of the application
-│
-├── angular.json         # Angular configuration
-├── package.json         # Node dependencies and scripts
-├── README.md            # Project documentation
-└── tsconfig.json        # TypeScript configuration
+# CONTRIBUTION
 
-
-Backend File Structure:
-
-jobreferralportal_backend/
-│
-├── jobreferralportal/    # Main backend directory
-│   ├── .mvn/             # Maven wrapper files
-│   ├── src/              # Source code
-│   │   ├── main/         # Main application source files
-│   │   └── test/         # Test files
-│   ├── mvnw              # Maven wrapper for Linux
-│   ├── mvnw.cmd          # Maven wrapper for Windows
-│   ├── pom.xml           # Maven project file for dependency management
-└── README.md             # Project documentation
-
-
--->CONTRIBUTING
 Please follow these steps for contributing to the project:
 
-1.Fork the repository.
-2.Create a new feature branch.
-3.Commit your changes and submit a pull request.
+1. Fork the repository.
+2. Create a new feature branch.
+3. Commit your changes and submit a pull request.
+4. Merge your changes.
 
--->TEAM MEMBERS
+# TEAM MEMBERS
 
-Rishika Reddy Dudipala
-Chitiprolu Aravind 
-Shiva Sai Reddy Kodandapuram
-Ravali Kudaravalli
-Ramya Madhavareddy 
-Rajini Vijetha Rudrarapu
-Gayathri Vigna Penmetsa 
-Sreshta Chityala 
-Nidjintha Trisha Reddy 
-
+1. Rishika Reddy Dudipala
+2. Chitiprolu Aravind 
+3. Shiva Sai Reddy Kodandapuram
+4. Ravali Kudaravalli
+5. Ramya Madhavareddy 
+6. Rajini Vijetha Rudrarapu
+7. Gayathri Vigna Penmetsa 
+8. Sreshta Chityala 
+9. Nidjintha Trisha Reddy
