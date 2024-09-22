@@ -72,7 +72,6 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.2.3</version> <!-- Add a valid version of Apache POI for handling .xlsx files -->
 		</dependency>
-
 	</dependencies>
 
 	<build>
