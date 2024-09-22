@@ -1,0 +1,12 @@
+referralportaldb_high = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-chicago-1.oraclecloud.com))(connect_data=(service_name=gcf76530bda57a1_referralportaldb_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+referralportaldb_low = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-chicago-1.oraclecloud.com))(connect_data=(service_name=gcf76530bda57a1_referralportaldb_low.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+referralportaldb_medium = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-chicago-1.oraclecloud.com))(connect_data=(service_name=gcf76530bda57a1_referralportaldb_medium.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+referralportaldb_tp = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-chicago-1.oraclecloud.com))(connect_data=(service_name=gcf76530bda57a1_referralportaldb_tp.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+referralportaldb_tpurgent = (description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.us-chicago-1.oraclecloud.com))(connect_data=(service_name=gcf76530bda57a1_referralportaldb_tpurgent.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+
+
+
