@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,9 +30,35 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public boolean updateJob(Long id, Job updatedJob) {
+        //get Job based on id
+        Job jobForUpdate = jobRepo.getReferenceById(id);
+
+        jobForUpdate.setPositionName(updatedJob.getPositionName());
+        jobForUpdate.setJobDescription(updatedJob.getJobDescription());
+        jobForUpdate.setDepartmentName(updatedJob.getDepartmentName());
+        jobForUpdate.setNumberOfOpenPositions(updatedJob.getNumberOfOpenPositions());
+
+        try{
+            jobRepo.save(jobForUpdate);
+            return  true;
+        }catch(DataAccessException e){
+            return  false;
+        }
+
+    }
+
+    @Override
     public void saveJobsFromExcel(MultipartFile file) throws IOException {
         List<Job> jobs = parseExcelFile(file);
         jobRepo.saveAll(jobs);
+    }
+
+    @Override
+    public void deleteJob(Long id) {
+        jobRepo.deleteById(id);
+        Job jobCheck = jobRepo.getReferenceById(id);
+
     }
 
     private List<Job> parseExcelFile(MultipartFile file) throws IOException {
