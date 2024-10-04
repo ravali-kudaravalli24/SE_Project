@@ -67,6 +67,19 @@
 			<version>5.2.3</version> <!-- Add a valid version of Apache POI -->
 		</dependency>
 
+		<!-- Spring Security Dependency -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
@@ -88,7 +101,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-		</plugins>
+        </plugins>
 	</build>
 
 </project>
