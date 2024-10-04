@@ -1,6 +1,7 @@
 package com.innovators.jobreferralportal.controller;
 
 import com.innovators.jobreferralportal.Service.EmployeeService;
+import com.innovators.jobreferralportal.Service.JobService;
 import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,13 @@ import java.io.IOException;
 import java.sql.Ref;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
 
+    @Autowired
+    JobService jobService;
     @Autowired
     private EmployeeService employeeService;
 
@@ -59,5 +63,10 @@ public class EmployeeController {
         return ResponseEntity.ok(opList);
     }
 
+    @GetMapping("/search")
+    public List<Job> searchJob(@RequestParam String positionName) {
+        return jobService.searchJob(positionName);
+    }
 }
+
 

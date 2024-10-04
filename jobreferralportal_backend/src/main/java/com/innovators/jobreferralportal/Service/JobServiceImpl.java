@@ -60,6 +60,11 @@ public class JobServiceImpl implements JobService {
 
     }
 
+    @Override
+    public List<Job> searchJob(String positionName) {
+       return jobRepo.findAllByPositionNameContaining(positionName);
+    }
+
     private List<Job> parseExcelFile(MultipartFile file) throws IOException {
         List<Job> jobList = new ArrayList<>();
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
