@@ -26,7 +26,6 @@ public class JobServiceImpl implements JobService {
     @Override
     public Job addJob(Job jobListing) {
         return jobRepo.save(jobListing);
-
     }
 
     @Override

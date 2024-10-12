@@ -1,14 +1,9 @@
 package com.innovators.jobreferralportal.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.innovators.jobreferralportal.enums.StatusEnum;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Data
@@ -22,6 +17,12 @@ public class ReferredCandidate {
     private Long referralId;
     private String fName;
     private String lName;
-    private String referredEmployeeId;
     private int yearsOfExp;
+    private Long referredBy;
+    private String status;
+    @Lob
+    private byte[] resume; // This will store the PDF file
+
+
+
 }

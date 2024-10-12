@@ -1,10 +1,8 @@
 package com.innovators.jobreferralportal.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.innovators.jobreferralportal.enums.RoleEnum;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -20,6 +18,10 @@ public class Employee {
     private String lName;
     private String email;
     private String phone_number;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
     private String position;
+    private String username;
+    private String password;
+    private int score;
 }
