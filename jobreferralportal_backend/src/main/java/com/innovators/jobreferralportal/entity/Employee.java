@@ -23,5 +23,9 @@ public class Employee {
     private String position;
     private String username;
     private String password;
-    private int score;
+    private Integer score;
+    public Long getEmployeeID() {
+        return employeeID;
+    }
+
 }

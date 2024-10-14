@@ -11,5 +11,5 @@ import java.util.List;
 public interface EmployeeService {
     public void referCandidate(ReferredCandidate referredCandidate) throws IOException;
     public List<Job> getAllJobs();
-    public List<ReferredCandidate> getAllReferredCandidates();
+    public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId);
 }
