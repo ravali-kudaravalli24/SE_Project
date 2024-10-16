@@ -28,10 +28,11 @@ public class EmployeeServiceImpl implements EmployeeService{
         return jobRepo.findAll();
     }
 
-    @Override
-    public List<ReferredCandidate> getAllReferredCandidates() {
-        return referredCandidateRepo.findAll();
-    }
+   @Override
+public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId) {
+    return referredCandidateRepo.findByReferredBy(employeeId); 
+}
+
 
 
 }
