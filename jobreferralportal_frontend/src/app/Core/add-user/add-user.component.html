@@ -1,0 +1,47 @@
+<div class="add-user-container">
+    <h2>Add User</h2>
+    <form [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="fName">First Name:</label>
+        <input id="fName" formControlName="fName" required>
+      </div>
+      <div>
+        <label for="lName">Last Name:</label>
+        <input id="lName" formControlName="lName" required>
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input id="email" formControlName="email" type="email" required>
+      </div>
+      <div>
+        <label for="phone_number">Phone Number:</label>
+        <input id="phone_number" formControlName="phone_number" required>
+      </div>
+      <div>
+        <label for="role">Role:</label>
+        <input id="role" formControlName="role" required>
+      </div>
+      <div>
+        <label for="position">Position:</label>
+        <input id="position" formControlName="position" required>
+      </div>
+      <div>
+        <label for="username">Username:</label>
+        <input id="username" formControlName="username" required>
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input id="password" formControlName="password" type="password" required>
+      </div>
+      <div>
+        <label for="verifyPassword">Verify Password:</label>
+        <input id="verifyPassword" formControlName="verifyPassword" type="password" required>
+      </div>
+      <div>
+        <button type="submit">Add User</button>
+      </div>
+    </form>
+    <div *ngIf="message" class="success">{{ message }}</div>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </div>
+  

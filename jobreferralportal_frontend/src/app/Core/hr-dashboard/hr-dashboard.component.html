@@ -1,0 +1,69 @@
+<div class="container">
+  <div *ngIf="alertMessage" class="alert">{{ alertMessage }}</div>
+   
+
+    <button (click)="openAddJobModal()">Add Job</button>
+    <div *ngIf="showConfirmationModal" class="modal">
+      <div class="modal-content">
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete this job?</p>
+        <div class="button-group">
+        <button (click)="confirmDelete()">Yes</button>
+        <button (click)="cancelDelete()">No</button>
+      </div>
+      </div>
+    </div>
+    <div *ngIf="showJobModal" class="modal">
+      <div class="modal-content">
+        <h2>{{ selectedJob ? 'Edit Job' : 'Add Job' }}</h2>
+        <div class="form-group">
+          <input [(ngModel)]="newJob.jobId" placeholder="Job ID" />
+          <input [(ngModel)]="newJob.positionName" placeholder="Position" required/>
+          <input [(ngModel)]="newJob.jobDescription" placeholder="Description" required/>
+          <input [(ngModel)]="newJob.departmentName" placeholder="Department" required/>
+          <input [(ngModel)]="newJob.numberOfOpenPositions" placeholder="Number of Positions" required/>
+        </div>
+    
+        <div class="button-group">
+          <button (click)="saveJob()">Save</button>
+          <button (click)="closeJobModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    
+  
+  
+  
+      <table>
+        <tr>
+          <th>Job ID</th>
+          <th>Position</th>
+          <th>Description</th>
+          <th>Department</th>
+          <th>Open Positions</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let job of jobs">
+          <td>{{ job.jobId }}</td>
+          <td>{{ job.positionName }}</td>
+          <td>{{ job.jobDescription }}</td>
+          <td>{{ job.departmentName }}</td>
+          <td>{{ job.numberOfOpenPositions }}</td>
+          <td>
+            <div class="action-buttons">
+              <button (click)="editJob(job)">Edit</button>
+              <button (click)="deleteJob(job.jobId)">Delete</button>
+            </div>
+          </td>
+          
+        </tr>
+      </table>
+  
+   
+
+   
+    
+  
+   </div>
+  
