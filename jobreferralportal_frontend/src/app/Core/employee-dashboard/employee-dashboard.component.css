@@ -1,0 +1,55 @@
+.dashboard-container {
+  padding: 20px;
+  text-align: center; 
+}
+
+.job-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; 
+  gap: 20px;
+}
+
+.job-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  width: 300px; 
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column; 
+  justify-content: space-between; 
+}
+
+.job-card h2 {
+  margin: 0; 
+}
+
+.job-card:hover {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-top: auto; 
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.no-jobs-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5em;
+  text-align: center;
+  color: #555;
+}
