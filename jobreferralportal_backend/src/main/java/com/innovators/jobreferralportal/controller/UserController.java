@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,8 +36,10 @@ public class UserController {
     private EmployeeRepo employeeRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> login(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
+        Map<String, Object> response = new HashMap<>();
         try {
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -47,14 +51,19 @@ public class UserController {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("employeeID", employee.getEmployeeID());
                 session.setMaxInactiveInterval(30 * 60);
-                return ResponseEntity.ok("Login successful for user: " + employee.getUsername());
+                response.put("message", "Login successful");
+                response.put("employeeID", employee.getEmployeeID());
+                response.put("employeeType", employee.getRole().getRoleName());
+                return ResponseEntity.ok(response);
             } else {
                 logger.warn("Login failed - user not found: {}", username);
-                return ResponseEntity.status(404).body("User not found");
+                response.put("message", "User not found");
+                return ResponseEntity.status(404).body(response);
             }
         } catch (Exception e) {
             logger.error("Login failed for user: {} - Error: {}", username, e.getMessage());
-            return ResponseEntity.status(401).body("Invalid credentials");
+            response.put("message", "Invalid credentials");
+            return ResponseEntity.status(401).body(response);
         }
     }
 
@@ -71,7 +80,7 @@ public class UserController {
 
 
     @PostMapping("/addUsers")
-    public ResponseEntity<String> addUsers(@RequestBody Employee employee) {
+    public ResponseEntity<Map<String, String>> addUsers(@RequestBody Employee employee) {
         logger.info("Attempting to add user: {}", employee.getUsername());
         if (employee.getPassword() != null) {
             String encodedPassword = passwordEncoder.encode(employee.getPassword());
@@ -80,12 +89,17 @@ public class UserController {
         try {
             employeeRepository.save(employee);
             logger.info("User added successfully: {}", employee.getUsername());
-            return ResponseEntity.ok("User added successfully: " + employee.getUsername());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User added successfully: " + employee.getUsername());
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Error adding user: {} - Error: {}", employee.getUsername(), e.getMessage());
-            return ResponseEntity.status(500).body("Error adding user: " + e.getMessage());
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Error adding user: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
         }
     }
+
 
 
 }

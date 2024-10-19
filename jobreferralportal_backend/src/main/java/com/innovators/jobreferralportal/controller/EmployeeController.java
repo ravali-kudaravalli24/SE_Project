@@ -6,6 +6,7 @@ import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +44,12 @@ public class EmployeeController {
                     .build();
 
             employeeService.referCandidate(candidate);
-            return ResponseEntity.ok("Candidate referred successfully!");
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("Candidate referred successfully!");
+
+
+
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error referring candidate: " + e.getMessage());
         }
@@ -53,7 +59,7 @@ public class EmployeeController {
 
     @GetMapping("/getAllJobs")
     public ResponseEntity<List<Job>> getAllJobs(){
-        List<Job> opList = employeeService.getAllJobs();
+        List<Job> opList = jobService.getAllJobs();
         return ResponseEntity.ok(opList);
     }
 

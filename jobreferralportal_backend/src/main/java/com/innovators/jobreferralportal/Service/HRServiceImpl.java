@@ -3,6 +3,7 @@ package com.innovators.jobreferralportal.Service;
 
 import com.innovators.jobreferralportal.controller.HRController;
 import com.innovators.jobreferralportal.entity.Employee;
+import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
 import com.innovators.jobreferralportal.repository.EmployeeRepo;
 import com.innovators.jobreferralportal.repository.JobRepo;
@@ -23,7 +24,8 @@ public class HRServiceImpl implements  HRService{
 
     @Autowired
     private EmployeeRepo employeeRepo;
-
+    @Autowired
+    private JobRepo jobRepo;
     @Autowired
     private ReferredCandidateRepo referredCandidateRepo;
 
