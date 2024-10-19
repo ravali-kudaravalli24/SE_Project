@@ -29,6 +29,10 @@ public class JobServiceImpl implements JobService {
     }
     @Override
     public Job addJob(Job jobListing) {
+	 if (jobListing == null) {
+            throw new IllegalArgumentException("Job listing cannot be null");
+        }
+
         return jobRepo.save(jobListing);
     }
 
@@ -60,8 +64,9 @@ public class JobServiceImpl implements JobService {
     @Override
     public void deleteJob(Long id) {
         jobRepo.deleteById(id);
-        Job jobCheck = jobRepo.getReferenceById(id);
-
+        if (jobRepo.existsById(id)) {
+            throw new IllegalStateException("Job not deleted");
+        }
     }
 
     @Override
