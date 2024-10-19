@@ -2,23 +2,36 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
   "version": "2.0.0",
   "tasks": [
+    
     {
+      "label": "npm: start-with-proxy",
       "type": "npm",
       "script": "start",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
-        "pattern": "$tsc",
+        "pattern": [
+          {
+            "regexp": "^(\\S.*): (\\d+):(\\d+) - (error|warning|info) (TS\\d+): (.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "code": 5,
+            "message": 6
+          }
+        ],
         "background": {
           "activeOnStart": true,
           "beginsPattern": {
-            "regexp": "(.*?)"
+            "regexp": ".*Compiling @angular.*"
           },
           "endsPattern": {
-            "regexp": "bundle generation complete"
+            "regexp": ".*Compiled successfully.*"
           }
         }
-      }
+      },
+      "args": ["--", "--proxy-config", "proxy.conf.json"]
     },
     {
       "type": "npm",

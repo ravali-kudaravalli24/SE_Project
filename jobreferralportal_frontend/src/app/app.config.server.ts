@@ -1,11 +1,20 @@
-import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
-import { appConfig } from './app.config';
+import { Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
 
-const serverConfig: ApplicationConfig = {
-  providers: [
-    provideServerRendering()
-  ]
-};
+@Injectable({
+  providedIn: 'root'
+})
+export class ServerConfigService {
+  private isServer: boolean;
 
-export const config = mergeApplicationConfig(appConfig, serverConfig);
+  constructor() {
+    this.isServer = isPlatformServer(PLATFORM_ID);
+  }
+
+  getConfig(): { [key: string]: any } {
+    return this.isServer ? { 
+      apiEndpoint: 'http://localhost:8090',
+      logging: false
+    } : {};
+  }
+}

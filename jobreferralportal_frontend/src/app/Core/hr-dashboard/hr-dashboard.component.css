@@ -1,0 +1,107 @@
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.container h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+
+.container button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.container button:hover {
+    background-color: #45a049;
+}
+
+
+.container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.container th, .container td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.container th {
+    background-color: #eff2ef;
+    color: rgb(23, 22, 22);
+}
+
+.container tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+.container td .action-buttons {
+    display: inline-block;
+}
+
+.container td button {
+    background-color: #2196F3;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin: 0; 
+    display: inline-block;
+}
+
+.container td button:hover {
+    background-color: #1976D2;
+}
+
+.container td button:last-child {
+    background-color: #f44336;
+}
+
+.container td button:last-child:hover {
+    background-color: #d32f2f;
+}
+
+.container td button + button {
+    margin-left: 0px;
+}
+.form-group {
+    display: flex;
+    gap: 15px; 
+    flex-wrap: wrap; 
+  }
+  
+  input {
+    padding: 10px; 
+    box-sizing: border-box; 
+    flex: 1; 
+    min-width: 150px; 
+  }
+  
+  .button-group {
+    display: flex; 
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
