@@ -22,7 +22,11 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private JobRepo jobRepo;
+    @Override
+    public List<Job> getAllJobs() {
 
+        return jobRepo.findAll();
+    }
     @Override
     public Job addJob(Job jobListing) {
         return jobRepo.save(jobListing);

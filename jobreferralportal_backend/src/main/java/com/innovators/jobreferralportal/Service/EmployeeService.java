@@ -10,6 +10,6 @@ import java.util.List;
 @Service
 public interface EmployeeService {
     public void referCandidate(ReferredCandidate referredCandidate) throws IOException;
-    public List<Job> getAllJobs();
+
     public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId);
 }
