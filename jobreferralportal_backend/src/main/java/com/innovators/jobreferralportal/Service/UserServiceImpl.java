@@ -13,6 +13,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(Employee employee) {
-        employeeRepo.save(employee); 
+        // Validate the employee object
+        if (employee.getEmployeeID() == null || 
+            employee.getFName() == null || 
+            employee.getLName() == null || 
+            employee.getEmail() == null || 
+            employee.getPhone_number() == null || 
+            employee.getRole() == null || 
+            employee.getPosition() == null || 
+            employee.getUsername() == null || 
+            employee.getPassword() == null) 
+            {
+            
+            throw new IllegalArgumentException("All fields must be non-null.");
+        }
+
+        employeeRepo.save(employee);
     }
+
 }
