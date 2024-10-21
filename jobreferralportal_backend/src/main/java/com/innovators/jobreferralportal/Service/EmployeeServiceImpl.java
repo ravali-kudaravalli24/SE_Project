@@ -10,25 +10,30 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
-    private ReferredCandidateRepo referredCandidateRepo;
+	@Autowired
+	private ReferredCandidateRepo referredCandidateRepo;
 
-    @Autowired
-    private JobRepo jobRepo;
-    @Override
-    public void referCandidate(ReferredCandidate referredCandidate) {
-     referredCandidateRepo.save(referredCandidate);
-    }
+	@Autowired
+	private JobRepo jobRepo;
 
+	@Override
+	public void referCandidate(ReferredCandidate referredCandidate) {
 
+		if (referredCandidate.getFName() == null || referredCandidate.getLName() == null
+				|| referredCandidate.getYearsOfExp() < 0 || referredCandidate.getReferredBy() == null
+				|| referredCandidate.getStatus() == null) {
+			throw new IllegalArgumentException(
+					"All fields except referralId must be non-null and yearsOfExp must be non-negative.");
+		}
 
-   @Override
-public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId) {
-    return referredCandidateRepo.findByReferredBy(employeeId); 
-}
+		referredCandidateRepo.save(referredCandidate);
+	}
 
-
+	@Override
+	public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId) {
+		return referredCandidateRepo.findByReferredBy(employeeId);
+	}
 
 }

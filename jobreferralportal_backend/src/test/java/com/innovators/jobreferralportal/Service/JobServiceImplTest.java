@@ -15,7 +15,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataAccessException;
 
 import com.innovators.jobreferralportal.entity.Job;
+import com.innovators.jobreferralportal.entity.ReferredCandidate;
 import com.innovators.jobreferralportal.repository.JobRepo;
+import com.innovators.jobreferralportal.repository.ReferredCandidateRepo;
 
 public class JobServiceImplTest {
 
@@ -28,6 +30,7 @@ public class JobServiceImplTest {
 	private Job updatedJob;
 	private Job job1;
 	private Job job2;
+	private ReferredCandidateRepo referredCandidateRepo;
 
 	@BeforeEach
 	public void setup() {
@@ -162,4 +165,6 @@ public class JobServiceImplTest {
 		assertTrue(result.isEmpty());
 	}
 	
+
 }
+
