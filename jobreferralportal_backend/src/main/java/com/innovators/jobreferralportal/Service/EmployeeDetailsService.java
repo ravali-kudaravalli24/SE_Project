@@ -1,4 +1,4 @@
-//package com.innovators.jobreferralportal.Service;
+//package com.innovators.jobreferralportal.service;
 //
 //import com.innovators.jobreferralportal.entity.Employee;
 //import com.innovators.jobreferralportal.repository.EmployeeRepo;
@@ -8,6 +8,8 @@
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.stereotype.Service;
 //
+//import java.util.Optional;
+//
 //@Service
 //public class EmployeeDetailsService implements UserDetailsService {
 //
@@ -16,11 +18,12 @@
 //
 //    @Override
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-////        Employee employee = employeeRepo.findByUsername(username);
-////        return new org.springframework.security.core.userdetails.User(
-////                employee.getUsername(),
-////                employee.getPassword(),
-////                employee.getAuthorities() 
-////        );
+//        Optional<Employee> emp = employeeRepo.findByUsername(username);
+//        Employee employee = emp.get();
+//        return new org.springframework.security.core.userdetails.User(
+//                employee.getUsername(),
+//                employee.getPassword(),
+//                employee.getAuthorities()
+//        );
 //    }
 //}

@@ -1,8 +1,7 @@
 package com.innovators.jobreferralportal.controller;
 
 import com.innovators.jobreferralportal.entity.Employee;
-//import com.innovators.jobreferralportal.Service.EmployeeDetailsService;
-
+//import com.innovators.jobreferralportal.service.EmployeeDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
+//
+//    @Autowired
 //    private EmployeeDetailsService employeeDetailsService;
     private final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
