@@ -21,12 +21,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void referCandidate(ReferredCandidate referredCandidate) {
 
-		if (referredCandidate.getFName() == null || referredCandidate.getLName() == null
-				|| referredCandidate.getYearsOfExp() < 0 || referredCandidate.getReferredBy() == null
-				|| referredCandidate.getStatus() == null) {
-			throw new IllegalArgumentException(
-					"All fields except referralId must be non-null and yearsOfExp must be non-negative.");
-		}
+//		if (referredCandidate.getFName() == null || referredCandidate.getLName() == null
+//				|| referredCandidate.getYearsOfExp() < 0 || referredCandidate.getReferredBy() == null
+//				|| referredCandidate.getStatus() == null) {
+//			throw new IllegalArgumentException(
+//					"All fields except referralId must be non-null and yearsOfExp must be non-negative.");
+//		}
 
 		referredCandidateRepo.save(referredCandidate);
 	}
