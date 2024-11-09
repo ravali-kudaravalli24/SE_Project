@@ -92,7 +92,7 @@ public class HRController {
         return ResponseEntity.ok(candidates);
     }
 
-    //hr should be able to download resume
+
     @GetMapping("/downloadResume/{id}")
     public ResponseEntity<ByteArrayResource> downloadResume(@PathVariable Long id) {
         try {
@@ -110,7 +110,7 @@ public class HRController {
         }
     }
 
-    //update status
+
     @PutMapping("/updateStatus")
     public ResponseEntity<String> updateCandidateStatus(@RequestParam String statusUpdate, @RequestParam Long id){
         //Now check if Status is "ACCEPTED" now a method needs to be called
@@ -136,7 +136,11 @@ public class HRController {
           return ResponseEntity.ok(leaderBoardList);
       }
     }
-
+    @GetMapping("/getAllJobs")
+    public ResponseEntity<List<Job>> getAllJobs(){
+        List<Job> opList = jobService.getAllJobs();
+        return ResponseEntity.ok(opList);
+    }
 
 
     // create login for HR

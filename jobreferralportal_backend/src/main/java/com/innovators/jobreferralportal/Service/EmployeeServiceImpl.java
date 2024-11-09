@@ -22,16 +22,13 @@ public class EmployeeServiceImpl implements EmployeeService{
      referredCandidateRepo.save(referredCandidate);
     }
 
-    @Override
-    public List<Job> getAllJobs() {
 
-        return jobRepo.findAll();
-    }
 
-    @Override
-    public List<ReferredCandidate> getAllReferredCandidates() {
-        return referredCandidateRepo.findAll();
-    }
+   @Override
+public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId) {
+    return referredCandidateRepo.findByReferredBy(employeeId); 
+}
+
 
 
 }

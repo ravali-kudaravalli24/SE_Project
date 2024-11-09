@@ -6,13 +6,16 @@ import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Ref;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -41,7 +44,12 @@ public class EmployeeController {
                     .build();
 
             employeeService.referCandidate(candidate);
-            return ResponseEntity.ok("Candidate referred successfully!");
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("Candidate referred successfully!");
+
+
+
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error referring candidate: " + e.getMessage());
         }
@@ -51,17 +59,25 @@ public class EmployeeController {
 
     @GetMapping("/getAllJobs")
     public ResponseEntity<List<Job>> getAllJobs(){
-        List<Job> opList = employeeService.getAllJobs();
+        List<Job> opList = jobService.getAllJobs();
         return ResponseEntity.ok(opList);
     }
 
 
-    //@TODO we need to write an api that will return all the candidates referred by the employee that is logged in
     @GetMapping("/getAllReferredCandidates")
-    public ResponseEntity<List<ReferredCandidate>> getAllReferredCandidates(){
-        List<ReferredCandidate> opList = employeeService.getAllReferredCandidates();
+    public ResponseEntity<List<ReferredCandidate>> getAllReferredCandidates(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Long employeeId = (Long) session.getAttribute("employeeID");
+
+        if (employeeId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        List<ReferredCandidate> opList = employeeService.getAllReferredCandidatesByEmployeeId(employeeId);
         return ResponseEntity.ok(opList);
     }
+
+
 
     @GetMapping("/search")
     public List<Job> searchJob(@RequestParam String positionName) {

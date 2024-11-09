@@ -1,70 +1,105 @@
 package com.innovators.jobreferralportal.controller;
-
-import com.innovators.jobreferralportal.Service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.innovators.jobreferralportal.entity.Employee;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.innovators.jobreferralportal.repository.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/users")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
-    private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
-    @PostMapping("/addUser")  
-    public ResponseEntity<String> addUser(@RequestBody Employee employee) {
-        try {
-            userService.addUser(employee);
-            return ResponseEntity.ok("User Successfully Added");
-        } catch (Exception e) {
-            LOGGER.error("Error adding user: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add user");
-        }
-    }
+    @Autowired
+    private EmployeeRepo employeeRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Employee employee, HttpServletRequest request) {
-    try {
+    public ResponseEntity<Map<String, Object>> login(@RequestParam String username, @RequestParam String password, HttpServletRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(employee.getUsername(), employee.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        Employee authenticatedEmployee = userService.findByUsername(employee.getUsername());
-        Long employeeId = authenticatedEmployee.getID(); 
-        request.getSession().setAttribute("employeeId", employeeId); 
-        return ResponseEntity.ok("Login successful");
-    } catch (Exception e) {
-        LOGGER.error("Login failed: {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(username, password));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+            Optional<Employee> employeeOpt = employeeRepository.findByUsername(username);
+            if (employeeOpt.isPresent()) {
+                Employee employee = employeeOpt.get();
+                HttpSession session = request.getSession(true);
+                session.setAttribute("employeeID", employee.getEmployeeID());
+                session.setMaxInactiveInterval(30 * 60);
+                response.put("message", "Login successful");
+                response.put("employeeID", employee.getEmployeeID());
+                response.put("employeeType", employee.getRole().getRoleName());
+                return ResponseEntity.ok(response);
+            } else {
+                logger.warn("Login failed - user not found: {}", username);
+                response.put("message", "User not found");
+                return ResponseEntity.status(404).body(response);
+            }
+        } catch (Exception e) {
+            logger.error("Login failed for user: {} - Error: {}", username, e.getMessage());
+            response.put("message", "Invalid credentials");
+            return ResponseEntity.status(401).body(response);
+        }
     }
-}
-
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            logger.info("Logging out user: {}", auth.getName());
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        logger.info("Logout successful");
+        return ResponseEntity.ok("Logout successful");
+    }
+
+
+    @PostMapping("/addUsers")
+    public ResponseEntity<Map<String, String>> addUsers(@RequestBody Employee employee) {
+        logger.info("Attempting to add user: {}", employee.getUsername());
+        if (employee.getPassword() != null) {
+            String encodedPassword = passwordEncoder.encode(employee.getPassword());
+            employee.setPassword(encodedPassword);
+        }
         try {
-            // Invalidate the session to log the user out
-            request.getSession().invalidate();
-            return ResponseEntity.ok("Logout successful");
+            employeeRepository.save(employee);
+            logger.info("User added successfully: {}", employee.getUsername());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User added successfully: " + employee.getUsername());
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            LOGGER.error("Error logging out user: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to log out user");
+            logger.error("Error adding user: {} - Error: {}", employee.getUsername(), e.getMessage());
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Error adding user: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
         }
     }
+
+
+
 }
