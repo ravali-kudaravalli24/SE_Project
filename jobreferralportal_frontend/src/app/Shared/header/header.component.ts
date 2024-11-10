@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../Services/services/auth.service';
 import { HrService } from '../../Services/services/hr.service';
+import { EmployeeService } from '../../Services/services/employee.service';
 import { Router } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
-import { EmployeeService } from '../../Services/services/employee.service';
 
 @Component({
   selector: 'app-header',
@@ -12,64 +12,52 @@ import { EmployeeService } from '../../Services/services/employee.service';
   imports: [CommonModule],
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  userRole: string | null = null;
+
   constructor(
     private authService: AuthService, 
     private hrService: HrService, 
-    private employeeService:EmployeeService,
+    private employeeService: EmployeeService,
     private router: Router
   ) {}
 
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']); 
+  ngOnInit() {
+    this.userRole = this.authService.getUserRole(); 
   }
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn(); 
   }
 
-  
-  viewReferredCandidates(): void {
-    const userRole = this.authService.getUserRole(); 
-    if (userRole === 'HR') {
-      this.hrService.getAllReferredCandidates().subscribe(
-        (data) => {
-          console.log('Referred candidates for HR:', data);
-          this.router.navigate(['/referred-candidates'], { state: { data } });
-        },
-        (error) => {
-          console.error('Error fetching referred candidates for HR:', error);
-        }
-      );
-    } else if (userRole === 'EMPLOYEE') {
-      this.employeeService.getAllReferredCandidates().subscribe(
-        (data) => {
-          console.log('Referred candidates for Employee:', data);
-          this.router.navigate(['/referred-candidates'], { state: { data } });
-        },
-        (error) => {
-          console.error('Error fetching referred candidates for Employee:', error);
-        }
-      );
-    }
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']); 
   }
 
   viewJobs() {
-    const userRole = this.authService.getUserRole(); 
-    if (userRole === 'HR') {
-    this.router.navigate(['/hr-dashboard']);
-    }
-    if (userRole === 'EMPLOYEE') 
-    {
-      this.router.navigate(['/employee-dashboard']);
+    const destination = this.userRole === 'HR' ? '/hr-dashboard' : '/employee-dashboard';
+    this.router.navigate([destination]);
+  }
+
+  viewReferredCandidates() {
+    if (this.userRole === 'HR') {
+      this.hrService.getAllReferredCandidates().subscribe((data) => {
+        this.router.navigate(['/referred-candidates'], { state: { data } });
+      });
+    } else if (this.userRole === 'EMPLOYEE') {
+      this.employeeService.getAllReferredCandidates().subscribe((data) => {
+        this.router.navigate(['/referred-candidates'], { state: { data } });
+      });
     }
   }
-  getButtonDetails() {
-    const isReferredCandidatesPage = this.router.url.includes('referred-candidates');
-    return {
-      text: isReferredCandidatesPage ? 'View Jobs' : 'View Referred Candidates',
-      action: isReferredCandidatesPage ? this.viewJobs.bind(this) : this.viewReferredCandidates.bind(this)
-    };
+
+  navigateTo(route: string) {
+    this.router.navigate([`/${route}`]);
+  }
+
+ 
+  get currentUrl(): string {
+    return this.router.url;
   }
 }
