@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../Services/services/auth.service';
 import { HrService } from '../../Services/services/hr.service';
 import { EmployeeService } from '../../Services/services/employee.service';
 import { Router } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -12,18 +13,34 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   userRole: string | null = null;
+  private roleSubscription: Subscription | null = null;
 
   constructor(
     private authService: AuthService, 
     private hrService: HrService, 
     private employeeService: EmployeeService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private cdRef: ChangeDetectorRef
+  ) {
+    this.userRole = this.authService.getUserRole(); 
+  }
 
   ngOnInit() {
-    this.userRole = this.authService.getUserRole(); 
+    this.roleSubscription = this.authService.getUserRoleObservable().subscribe(role => {
+      this.userRole = role; 
+    });
+    const sessionRole = this.authService.getUserRole();
+    if (sessionRole) {
+      this.userRole = sessionRole;
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.roleSubscription) {
+      this.roleSubscription.unsubscribe(); 
+    }
   }
 
   isLoggedIn(): boolean {
@@ -56,7 +73,6 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([`/${route}`]);
   }
 
- 
   get currentUrl(): string {
     return this.router.url;
   }
