@@ -24,7 +24,13 @@ export class JobService {
   deleteJob(jobId: number): Observable<String> {
     return this.http.delete(`${this.baseUrl}/deleteJob/${jobId}`,{ responseType: 'text' });
   }
+  
+  uploadBulkJobs(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
 
+    return this.http.post(`${this.baseUrl}/uploadBulkJobs`, formData,{ responseType: 'text' });
+  }
   
 
 }
