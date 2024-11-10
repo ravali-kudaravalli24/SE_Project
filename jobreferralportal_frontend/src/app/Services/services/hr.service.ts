@@ -18,6 +18,11 @@ export class HrService {
   getAllReferredCandidates(): Observable<any> {
     return this.http.get(`${this.baseUrl}/getAllReferredCandidates`);
   }
+  downloadResume(candidateId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/downloadResume/${candidateId}`, {
+      responseType: 'blob' // Set response type to 'blob' to handle file download
+    });
+  }
 
   
 }
