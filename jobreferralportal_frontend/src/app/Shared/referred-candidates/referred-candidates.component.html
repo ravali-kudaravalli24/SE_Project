@@ -26,7 +26,19 @@
       <td>{{ candidate.lname }}</td>
       <td>{{ candidate.yearsOfExp }}</td>
       <td>{{ candidate.referredBy }}</td>
-      <td>{{ candidate.status }}</td>
+      <td>
+        <ng-container *ngIf="userRole === 'HR'; else viewStatus">
+          <input [(ngModel)]="candidate.status" 
+                 placeholder="Enter status" 
+                 (keydown.enter)="updateStatus(candidate)" />
+        </ng-container>
+        
+        <ng-template #viewStatus>
+          {{ candidate.status }}
+        </ng-template>
+      </td>
+      
+
       <td *ngIf="userRole === 'HR'">
         <ng-container >
           <a (click)="downloadResume(candidate.referralId)">
