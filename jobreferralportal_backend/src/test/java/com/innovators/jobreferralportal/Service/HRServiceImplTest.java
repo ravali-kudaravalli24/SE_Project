@@ -2,12 +2,14 @@ package com.innovators.jobreferralportal.Service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +19,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.innovators.jobreferralportal.entity.Employee;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
+import com.innovators.jobreferralportal.enums.RoleEnum;
+import com.innovators.jobreferralportal.repository.EmployeeRepo;
+import com.innovators.jobreferralportal.repository.JobRepo;
 import com.innovators.jobreferralportal.repository.ReferredCandidateRepo;
 
 import io.jsonwebtoken.lang.Arrays;
@@ -25,11 +31,15 @@ import io.jsonwebtoken.lang.Arrays;
 public class HRServiceImplTest {
 
 	@InjectMocks
-	private HRServiceImpl yourService; // Replace with your actual service class
-
+	private HRServiceImpl yourService; 
+	
 	@Mock
-	private ReferredCandidateRepo referredCandidateRepo; // Replace with your actual repository
-
+	private ReferredCandidateRepo referredCandidateRepo;
+	@Mock
+	private EmployeeRepo employeeRepo;
+	@Mock
+	private JobRepo jobRepo;
+	
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -89,5 +99,31 @@ public class HRServiceImplTest {
 		assertFalse(result);
 		verify(referredCandidateRepo, times(1)).findById(id);
 	}
-
+//	@Test
+//    public void testGetLeaderBoardList_Success() {
+//        // Arrange: Mock employee data
+//       
+//        Employee emp1 = new Employee(1l,"Ramya","rao","ramya.doe@example.com","123-456-7890",RoleEnum.EMPLOYEE,"Software Developer","johndoe","password123",85);
+//        Employee emp2 = new Employee(1l,"Sravan","Kumar","sravan.doe@example.com","123-456-7890",RoleEnum.EMPLOYEE,"Software Developer","johndoe","password123",85);
+//        Employee emp3 = new Employee(1l,"Anudeep","Rao","anudeep.doe@example.com","123-456-7890",RoleEnum.EMPLOYEE,"Software Developer","johndoe","password123",85);
+//        List<Employee> employees =new ArrayList<>();
+//        employees.add(emp1);
+//        employees.add(emp2);
+//        employees.add(emp3);
+//        
+//
+//        // Mock the repository to return the employees list
+//        when(employeeRepo.findAll()).thenReturn(employees);
+//
+//        // Act: Call the method under test
+//        List<List<String>> leaderBoard = yourService.getLeaderBoardList();
+//System.out.println(leaderBoard);
+//        // Assert: Verify the leaderboard is sorted by score in descending order
+//        assertNotNull(leaderBoard);
+//        assertEquals(2, leaderBoard.size());  // We have 3 employees
+//        assertEquals(1l, leaderBoard.get(0).get(0));  // Employee with ID 2 (Jane Smith) should be first
+//        assertEquals("Ramya", leaderBoard.get(0).get(1));  // Name should be "Jane,Smith"
+//        assertEquals("rao", leaderBoard.get(0).get(2));  // Score should be 92
+//
+//           }
 }
