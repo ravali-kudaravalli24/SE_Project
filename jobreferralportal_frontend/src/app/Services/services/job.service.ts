@@ -31,6 +31,19 @@ export class JobService {
 
     return this.http.post(`${this.baseUrl}/uploadBulkJobs`, formData,{ responseType: 'text' });
   }
-  
 
+
+  searchJobs(positionName: string): Observable<any> {
+    return this.http.get<any>('/api/employee/search', {
+        params: { positionName: positionName }
+    });
+  }
+
+
+    hrSearchJobs(positionName: string): Observable<any> {
+      return this.http.get<any>('/api/hr/search', {
+          params: { positionName: positionName }
+      });
+
+}
 }
