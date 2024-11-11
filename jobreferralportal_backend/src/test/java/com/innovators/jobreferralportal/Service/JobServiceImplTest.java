@@ -3,16 +3,25 @@ package com.innovators.jobreferralportal.Service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataAccessException;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
@@ -26,11 +35,19 @@ public class JobServiceImplTest {
 
 	@Mock
 	private JobRepo jobRepo;
+
+	@Mock
+	private ReferredCandidateRepo referredCandidateRepo;
+	private MultipartFile multipartFile;
+
+	@Mock
+	private JobServiceImpl jobServiceImplMock;
+	private ExecutorService excelParserService;
+
 	private Job existingJob;
 	private Job updatedJob;
 	private Job job1;
 	private Job job2;
-	private ReferredCandidateRepo referredCandidateRepo;
 
 	@BeforeEach
 	public void setup() {
@@ -164,7 +181,140 @@ public class JobServiceImplTest {
 
 		assertTrue(result.isEmpty());
 	}
-	
 
+	@Test
+	public void testGetAllJobs_ReturnsJobs() {
+
+		Job job1 = new Job(1L, "Developer", "Software Developer", "New York", "4");
+		Job job2 = new Job(2L, "Tester", "QA Tester", "Chicago", "5");
+		List<Job> jobList = Arrays.asList(job1, job2);
+
+		when(jobRepo.findAll()).thenReturn(jobList);
+
+		List<Job> result = jobService.getAllJobs();
+
+		assertNotNull(result, "The result should not be null");
+		assertEquals(2, result.size(), "The size of the list should be 2");
+		assertEquals("Developer", result.get(0).getPositionName(), "The first job title should be 'Developer'");
+		assertEquals("Tester", result.get(1).getPositionName(), "The second job title should be 'Tester'");
+	}
+
+	@Test
+	public void testGetAllJobs_NoJobsFound() {
+
+		when(jobRepo.findAll()).thenReturn(Collections.emptyList());
+
+		List<Job> result = jobService.getAllJobs();
+
+		assertNotNull(result, "The result should not be null");
+		assertTrue(result.isEmpty(), "The list should be empty when no jobs are found");
+	}
+
+	public void testParseExcelFile_Success() throws Exception {
+
+		MockMultipartFile multipartFile = createMockExcelMultipartFile();
+
+		List<Job> jobList = jobService.parseExcelFile(multipartFile);
+
+		assertNotNull(jobList, "The job list should not be null");
+		assertEquals(2, jobList.size(), "There should be two jobs in the list");
+		assertEquals("Software Developer", jobList.get(0).getPositionName(),
+				"First job title should be 'Software Developer'");
+		assertEquals("QA Tester", jobList.get(1).getPositionName(), "Second job title should be 'QA Tester'");
+	}
+
+	private MockMultipartFile createMockExcelMultipartFile() throws IOException {
+
+		String excelData = "PositionName,JobDescription,DepartmentName,NumberOfOpenPositions\n"
+				+ "Software Developer,Develop software,Engineering,5\n"
+				+ "QA Tester,Test software,Quality Assurance,3\n";
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(excelData.getBytes());
+
+		return new MockMultipartFile("mock-file.xlsx", "mock-file.xlsx",
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", inputStream);
+	}
+
+	@Test
+	public void testParseExcelFile_EmptyFile() throws Exception {
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("Sheet1");
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		workbook.write(outputStream);
+		workbook.close();
+
+		byte[] byteArray = outputStream.toByteArray();
+		multipartFile = new MockMultipartFile("mock-file.xlsx", "mock-file.xlsx",
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", byteArray);
+		List<Job> jobList = jobService.parseExcelFile(multipartFile);
+
+		assertEquals(0, jobList.size());
+	}
+
+	@Test
+	public void testSaveJobsFromExcel_ValidFile() throws Exception {
+		MultipartFile file = ExcelCreationHelper();
+		Job job1 = Job.builder().positionName("Software Developer").jobDescription("Developer description")
+				.departmentName("IT").numberOfOpenPositions("3").build();
+
+		Job job2 = Job.builder().positionName("QA Tester").jobDescription("QA description").departmentName("QA")
+				.numberOfOpenPositions("2").build();
+		List<Job> jobs = Arrays.asList(job1, job2);
+		JobServiceImpl spyService = spy(jobService);
+		when(spyService.parseExcelFile(file)).thenReturn(jobs);
+
+		when(jobRepo.saveAll(jobs)).thenReturn(null);
+
+		jobService.saveJobsFromExcel(file);
+
+		verify(jobRepo, times(1)).saveAll(jobs);
+	}
+
+	public void testSaveJobsFromExcel_InvalidFileFormat() throws IOException {
+		// Create an invalid Excel file that cannot be parsed
+		Exception e = new Exception();
+		MockMultipartFile invalidFile = new MockMultipartFile("mock-invalid-file.xlsx", "mock-invalid-file.xlsx",
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", new byte[] { 1, 2, 3, 4, 5 });
+
+		when(jobService.parseExcelFile(invalidFile)).thenThrow(new IOException("Invalid file format"));
+
+		jobService.saveJobsFromExcel(invalidFile);
+		assertEquals("Invalid file format", e.getMessage());
+
+	}
+
+	public MockMultipartFile ExcelCreationHelper() throws Exception {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("sheet1");
+
+		XSSFRow headerRow = sheet.createRow(0);
+		headerRow.createCell(0).setCellValue("Position");
+		headerRow.createCell(1).setCellValue("Job Description");
+		headerRow.createCell(2).setCellValue("Department");
+		headerRow.createCell(3).setCellValue("Open Positions");
+
+		// Step 3: Add job data to the sheet
+		XSSFRow row1 = sheet.createRow(1);
+		row1.createCell(0).setCellValue("Software Developer");
+		row1.createCell(1).setCellValue("Developer description");
+		row1.createCell(2).setCellValue("IT");
+		row1.createCell(3).setCellValue("3");
+
+		XSSFRow row2 = sheet.createRow(2);
+		row2.createCell(0).setCellValue("QA Tester");
+		row2.createCell(1).setCellValue("QA description");
+		row2.createCell(2).setCellValue("QA");
+		row2.createCell(3).setCellValue("2");
+
+		workbook.write(byteArrayOutputStream);
+		workbook.close();
+
+		byte[] byteArray = byteArrayOutputStream.toByteArray();
+		MockMultipartFile multipartFile = new MockMultipartFile("mock-file.xlsx", // File name
+				"mock-file.xlsx", // Original file name
+				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME type for Excel
+				byteArray);
+		return multipartFile;
+	}
 }
-
