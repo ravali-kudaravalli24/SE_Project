@@ -45,6 +45,7 @@ public class HRServiceImpl implements  HRService{
        if(referredCandidate.isPresent()){
         ReferredCandidate candidate = referredCandidate.get();
         candidate.setStatus(status);
+        referredCandidateRepo.save(candidate);
         return  true;
        }else{
            return false;
