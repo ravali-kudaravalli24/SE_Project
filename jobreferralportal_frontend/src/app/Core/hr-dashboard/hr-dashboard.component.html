@@ -3,6 +3,7 @@
    
 
     <button (click)="openAddJobModal()">Add Job</button>
+    <button (click)="openBulkJobModal()">Bulk Upload Jobs</button>
     <div *ngIf="showConfirmationModal" class="modal">
       <div class="modal-content">
         <h2>Confirm Deletion</h2>
@@ -11,6 +12,24 @@
         <button (click)="confirmDelete()">Yes</button>
         <button (click)="cancelDelete()">No</button>
       </div>
+      </div>
+    </div>
+    <div *ngIf="showBulkJobModal" class="modal">
+      <div class="modal-content">
+        <h2>Bulk Upload Jobs</h2>
+        <div class="form-group">
+          <input type="file" id="jobFile" (change)="onFileSelected($event)" />
+        </div>
+    
+        <div *ngIf="fileName">
+          <p>Selected file: {{ fileName }}</p>
+        </div>
+    
+    
+        <div class="button-group">
+          <button (click)="uploadFile()" [disabled]="!selectedFile">Upload</button>
+          <button (click)="closeBulkJobModal()">Cancel</button>
+        </div>
       </div>
     </div>
     <div *ngIf="showJobModal" class="modal">

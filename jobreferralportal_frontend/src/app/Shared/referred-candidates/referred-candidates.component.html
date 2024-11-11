@@ -1,4 +1,8 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 <div class="container">
+
   <h2>Referred Candidates</h2>
 
   <div *ngIf="candidates.length === 0 else referredList" class="no-candidates-message">
@@ -13,6 +17,8 @@
       <th>Years of Experience:</th>
       <th>Referred By:</th>
       <th>Status:</th>
+      <th *ngIf="userRole === 'HR'">Resume:</th>
+     
     </tr>
     <tr *ngFor="let candidate of candidates">
       <td>{{ candidate.referralId }}</td>
@@ -20,7 +26,26 @@
       <td>{{ candidate.lname }}</td>
       <td>{{ candidate.yearsOfExp }}</td>
       <td>{{ candidate.referredBy }}</td>
-      <td>{{ candidate.status }}</td>
+      <td>
+        <ng-container *ngIf="userRole === 'HR'; else viewStatus">
+          <input [(ngModel)]="candidate.status" 
+                 placeholder="Enter status" 
+                 (keydown.enter)="updateStatus(candidate)" />
+        </ng-container>
+        
+        <ng-template #viewStatus>
+          {{ candidate.status }}
+        </ng-template>
+      </td>
+      
+
+      <td *ngIf="userRole === 'HR'">
+        <ng-container >
+          <a (click)="downloadResume(candidate.referralId)">
+            <i class="fa fa-download" aria-hidden="true"></i> 
+          </a>
+        </ng-container>
+      </td>
       
       
     </tr>

@@ -1,12 +1,17 @@
 <header>
   <h1>Job Referral Portal</h1>
-  <div class="button-group">
-    <button 
-      class="view-button" 
-      (click)="getButtonDetails().action()" 
-      *ngIf="isLoggedIn()">
-      {{ getButtonDetails().text }}
-    </button>
-    <button class="logout-button" *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
-  </div>
+  <nav class="navbar">
+    <ul class="navbar-list">
+      <li *ngIf="userRole === 'HR' && currentUrl !== '/addUsers' && isLoggedIn()">
+        <a class="view-button" (click)="navigateTo('addUsers')">Add User</a>
+      </li>
+      <li *ngIf="currentUrl !== '/hr-dashboard' && currentUrl !== '/employee-dashboard' && isLoggedIn()">
+        <a class="view-button" (click)="viewJobs()">View Jobs</a>
+      </li>
+      <li *ngIf="currentUrl !== '/referred-candidates' && isLoggedIn()">
+        <a class="view-button" (click)="viewReferredCandidates()">View Referred Candidates</a>
+      </li>
+    </ul>
+  </nav>
+  <button class="logout-button" *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
 </header>

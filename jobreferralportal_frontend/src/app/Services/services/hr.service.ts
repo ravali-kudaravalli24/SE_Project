@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,6 +18,18 @@ export class HrService {
   getAllReferredCandidates(): Observable<any> {
     return this.http.get(`${this.baseUrl}/getAllReferredCandidates`);
   }
+  downloadResume(candidateId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/downloadResume/${candidateId}`, {
+      responseType: 'blob' 
+    });
+  }
+   
+  updateCandidateStatus(statusUpdate: string, id: number): Observable<any> {
+    const params = new HttpParams()
+      .set('statusUpdate', statusUpdate)
+      .set('id', id.toString());
 
+    return this.http.put(`${this.baseUrl}/updateStatus`, null, { params });
+  }
   
 }
