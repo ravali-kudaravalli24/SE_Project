@@ -142,6 +142,12 @@ public class HRController {
         return ResponseEntity.ok(opList);
     }
 
+    @GetMapping("/search")
+    public List<Job> searchJob(@RequestParam String positionName) {
+        return jobService.searchJob(positionName);
+    }
+
+
 
     // create login for HR
 //     @PostMapping("/loginHR")

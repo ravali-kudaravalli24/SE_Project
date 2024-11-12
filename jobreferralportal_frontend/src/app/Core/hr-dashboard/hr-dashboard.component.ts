@@ -22,6 +22,7 @@ export class HrDashboardComponent implements OnInit {
   fileName: string = '';
   showConfirmationModal = false;
   jobToDeleteId: number | null = null;
+  searchQuery: string = '';
   constructor(private hrService: HrService , private jobService: JobService) {}
 
   ngOnInit(): void {
@@ -151,6 +152,16 @@ export class HrDashboardComponent implements OnInit {
     }
     closeBulkJobModal(): void {
       this.showBulkJobModal = false;
+      }
+
+      searchJobs(): void {
+        if (this.searchQuery) {
+          this.jobService.hrSearchJobs(this.searchQuery).subscribe((data: any[]) => {
+            this.jobs = data;
+          });
+        } else {
+          this.loadJobs();
+        }
       }
   
   
