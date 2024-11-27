@@ -34,6 +34,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId) {
 		return referredCandidateRepo.findByReferredBy(employeeId);
+
+	}
+	@Override
+	public void deleteReferral(Long id) {
+		referredCandidateRepo.deleteById(id);
 	}
 
 }
+
