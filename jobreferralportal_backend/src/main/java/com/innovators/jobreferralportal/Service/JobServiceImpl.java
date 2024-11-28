@@ -70,8 +70,13 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> searchJob(String positionName) {
-        return jobRepo.findAllByPositionNameContaining(positionName);
+    public List<Job> searchJob(String positionName, String location) {
+        if (location == null) {
+            return jobRepo.findByPositionNameContainingIgnoreCase(positionName);
+        } else {
+            return jobRepo.findByPositionNameContainingIgnoreCaseAndLocationContainingIgnoreCase(positionName, location);
+        }
+
     }
 
     protected List<Job> parseExcelFile(MultipartFile file) throws IOException {
