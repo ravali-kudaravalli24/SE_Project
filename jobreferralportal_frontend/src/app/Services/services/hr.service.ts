@@ -36,4 +36,5 @@ export class HrService {
         params: { positionName: candidateName }
     });
   }
+ 
 }
