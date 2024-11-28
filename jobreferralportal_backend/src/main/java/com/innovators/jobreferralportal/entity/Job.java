@@ -20,4 +20,5 @@ public class Job {
     private String jobDescription;
     private String departmentName;
     private String numberOfOpenPositions;
+    private String location;
 }

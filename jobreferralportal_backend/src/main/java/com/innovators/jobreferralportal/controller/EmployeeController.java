@@ -80,8 +80,8 @@ public class EmployeeController {
 
 
     @GetMapping("/search")
-    public List<Job> searchJob(@RequestParam String positionName) {
-        return jobService.searchJob(positionName);
+    public List<Job> searchJob(@RequestParam String positionName, @RequestParam(required = false) String location) {
+        return jobService.searchJob(positionName, location);
     }
 }
 
