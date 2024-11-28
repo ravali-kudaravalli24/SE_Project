@@ -31,5 +31,9 @@ export class HrService {
 
     return this.http.put(`${this.baseUrl}/updateStatus`, null, { params });
   }
-  
+  searchReferredCandidates(candidateName: string): Observable<any> {
+    return this.http.get<any>('/api/hr/searchCandidates', {
+        params: { positionName: candidateName }
+    });
+  }
 }

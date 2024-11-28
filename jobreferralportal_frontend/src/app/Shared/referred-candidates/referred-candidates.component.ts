@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 export class ReferredCandidatesComponent implements OnInit {
   candidates: any[] = [];
   userRole: string | null = null;
-
+  searchQuery: string = '';
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -68,5 +68,18 @@ export class ReferredCandidatesComponent implements OnInit {
           console.error('Error updating status', error);
         }
       });
+  }
+  searchReferredCandidates(): void {
+    if (this.searchQuery) {
+      this.hrService.searchReferredCandidates(this.searchQuery).subscribe((data: any[]) => {
+        this.candidates = data;
+      });
+    } else {
+        this.hrService.getAllReferredCandidates().subscribe({
+          next: (data) => this.candidates = data,
+          error: (error) => console.error('Error fetching candidates', error)
+        });
+      
+    }
   }
 }
