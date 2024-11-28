@@ -3,6 +3,9 @@ package com.innovators.jobreferralportal.Service;
 
 import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.repository.JobRepo;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -16,12 +19,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JobServiceImpl implements JobService {
 
     @Autowired
     private JobRepo jobRepo;
+
+    @Getter
+    @Setter
+    private Set<String> locations;
+
+
+    @PostConstruct
+    public void JobServiceImpl() {
+        List<Job> jobs  = jobRepo.findAll();
+        this.locations = jobs.stream().map(Job::getLocationData).filter(Objects::nonNull).collect(Collectors.toSet());
+        System.out.println(locations);
+    }
+
     @Override
     public List<Job> getAllJobs() {
 
@@ -33,6 +52,9 @@ public class JobServiceImpl implements JobService {
             throw new IllegalArgumentException("Job listing cannot be null");
         }
 
+        if(jobListing.getLocationData() != null){
+            this.locations.add(jobListing.getLocationData());
+        }
         return jobRepo.save(jobListing);
     }
 
