@@ -22,31 +22,9 @@ export class ReferredCandidatesComponent implements OnInit {
     if (history.state && history.state.data) {
       this.candidates = history.state.data;
       console.log('Candidates data from state:', this.candidates);
-    } else {
-      const userRole = this.authService.getUserRole(); 
-      if (userRole === 'HR') {
-        this.hrService.getAllReferredCandidates().subscribe(
-          (data:any) => {
-            console.log('Referred candidates for HR:', data);
-            this.router.navigate(['/referred-candidates'], { state: { data } });
-          },
-          (error:any) => {
-            console.error('Error fetching referred candidates for HR:', error);
-          }
-        );
-      } else if (userRole === 'EMPLOYEE') {
-        this.employeeService.getAllReferredCandidates().subscribe(
-          (data) => {
-            console.log('Referred candidates for Employee:', data);
-            this.router.navigate(['/referred-candidates'], { state: { data } });
-          },
-          (error) => {
-            console.error('Error fetching referred candidates for Employee:', error);
-          }
-        );
-      }
+    }  
       
-    }
+    
   }
 }
 
