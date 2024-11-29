@@ -1,5 +1,4 @@
 
-import { Component } from '@angular/core';
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../Services/services/auth.service';
 import { HrService } from '../../Services/services/hr.service';
@@ -17,13 +16,6 @@ import { Subscription } from 'rxjs';
   imports:[CommonModule]
 })
 
-export class HeaderComponent {
-  
-  constructor(private authService: AuthService, private router: Router,private hrService: HrService, private employeeService:EmployeeService) {
-    
-  }
-
-  
     
 export class HeaderComponent implements OnInit, OnDestroy {
   userRole: string | null = null;
@@ -127,6 +119,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else {
       return { text: 'View Leaderboard', action: this.viewLeaderboard.bind(this) };
     }
+  }
 
     
   logout() {
