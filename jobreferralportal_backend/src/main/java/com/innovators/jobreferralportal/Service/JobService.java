@@ -11,6 +11,6 @@ public interface JobService {
     public boolean updateJob(Long id, Job updatedJob);
     public void saveJobsFromExcel(MultipartFile file) throws IOException;
     public void deleteJob(Long id);
-    public List<Job> searchJob(String positionName, String location);
+    public List<Job> searchJob(String keyword);
     public List<Job> getAllJobs();
 }

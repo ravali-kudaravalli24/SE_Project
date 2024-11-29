@@ -21,8 +21,5 @@ public class Job {
     private String departmentName;
     private String numberOfOpenPositions;
     private String location;
-
-    public String getLocationData() {
-        return location;
-    }
+    private String keywords;
 }

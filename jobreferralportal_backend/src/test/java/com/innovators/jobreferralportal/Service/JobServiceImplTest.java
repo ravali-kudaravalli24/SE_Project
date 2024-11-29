@@ -163,10 +163,9 @@ public class JobServiceImplTest {
 	@Test
 	public void testSearchJob_withValidPositionName_shouldReturnMatchingJobs() {
 		String positionName = "Software";
-		String location = "Dallas";
 		List<Job> expectedJobs = Arrays.asList(job1, job2);
 		when(jobRepo.findByPositionNameContainingIgnoreCaseAndLocationContainingIgnoreCase(positionName, location)).thenReturn(expectedJobs);
-		List<Job> result = jobService.searchJob(positionName,location);
+		List<Job> result = jobService.searchJob(positionName);
 		assertEquals(2, result.size());
 		assertTrue(result.contains(job1));
 		assertTrue(result.contains(job2));
@@ -175,10 +174,9 @@ public class JobServiceImplTest {
 	@Test
 	public void testSearchJob_withInvalidPositionName_shouldReturnEmptyList() {
 		String positionName = "Nonexistent Position";
-		String location = "Dallas";
 		when(jobRepo.findByPositionNameContainingIgnoreCaseAndLocationContainingIgnoreCase(positionName,location)).thenReturn(Collections.emptyList());
 
-		List<Job> result = jobService.searchJob(positionName, location);
+		List<Job> result = jobService.searchJob(positionName);
 
 		assertTrue(result.isEmpty());
 	}
