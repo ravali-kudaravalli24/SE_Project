@@ -14,11 +14,15 @@ export class HrDashboardComponent implements OnInit {
   jobs: any[] = [];
   leaderBoard: any[] = [];
   showJobModal = false;
+  showBulkJobModal = false;
   selectedJob: any = null;
+  selectedFile: File | null = null;
   newJob = { jobId: 0, positionName: '', jobDescription: '' ,departmentName:'',numberOfOpenPositions:0 };
   alertMessage: string = '';
+  fileName: string = '';
   showConfirmationModal = false;
   jobToDeleteId: number | null = null;
+  searchQuery: string = '';
   constructor(private hrService: HrService , private jobService: JobService) {}
 
   ngOnInit(): void {
@@ -41,6 +45,22 @@ export class HrDashboardComponent implements OnInit {
     this.showJobModal = true; 
     this.resetNewJob();
   }
+  openBulkJobModal() {
+    this.showBulkJobModal = true; 
+    this.resetNewJob();
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      this.fileName = file.name;
+      this.alertMessage = '';
+      if (!file.name.endsWith('.xlsx')) {
+        this.alertMessage = 'Please upload a CSV file.';
+        this.selectedFile = null;
+      }
+    }
+  }
   resetNewJob():void{
     this.newJob = {
       jobId: 0,
@@ -48,6 +68,26 @@ export class HrDashboardComponent implements OnInit {
       jobDescription: '',
       departmentName: '',
       numberOfOpenPositions: 0
+    }
+  }
+  uploadFile() {
+    if (this.selectedFile) {
+      this.jobService.uploadBulkJobs(this.selectedFile).subscribe(
+        (response: any) => {
+          this.loadJobs();
+          this.closeBulkJobModal(); 
+        },
+        (error) => {
+          console.error('Error uploading job listings:', error);
+          if (error.status === 400) {
+            this.alertMessage = 'Please upload a valid Excel file.';
+          } else {
+            this.alertMessage = 'Failed to upload job listings. Please try again later.';
+          }
+        }
+      );
+    } else {
+      this.alertMessage = 'Please select a file to upload.';
     }
   }
 
@@ -110,6 +150,19 @@ export class HrDashboardComponent implements OnInit {
   closeJobModal(): void {
     this.showJobModal = false;
     }
+    closeBulkJobModal(): void {
+      this.showBulkJobModal = false;
+      }
 
+      searchJobs(): void {
+        if (this.searchQuery) {
+          this.jobService.hrSearchJobs(this.searchQuery).subscribe((data: any[]) => {
+            this.jobs = data;
+          });
+        } else {
+          this.loadJobs();
+        }
+      }
+  
   
 }

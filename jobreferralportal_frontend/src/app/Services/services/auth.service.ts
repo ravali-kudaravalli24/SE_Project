@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { SessionService } from './session.service'; 
 
 @Injectable({
@@ -10,6 +10,8 @@ import { SessionService } from './session.service';
 export class AuthService {
   private baseUrl = '/api/users';
   private lastUrl: string | null = null;
+  private userRoleSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+
 
 
   constructor(
@@ -39,6 +41,7 @@ export class AuthService {
         const employeeType=response.employeeType;
         this.sessionService.setSessionData('employeeID', employeeID); 
         this.sessionService.setSessionData('employeeType', employeeType); 
+        this.userRoleSubject.next(employeeType);
       }),
       catchError(error => {
         console.error('Login failed', error);
@@ -51,6 +54,7 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/logout`, {}, { responseType: 'text' }).subscribe(() => {
       this.sessionService.clearSession();
       this.router.navigate(['/login']);
+      this.userRoleSubject.next(null);
     });
   }
 
@@ -65,6 +69,10 @@ export class AuthService {
 
   getUserRole(): string|null {
     return this.sessionService.getSessionData('employeeType');
+  }
+
+  getUserRoleObservable(): Observable<string | null> {
+    return this.userRoleSubject.asObservable();
   }
   addUser(employee: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

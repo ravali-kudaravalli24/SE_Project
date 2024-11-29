@@ -84,5 +84,8 @@ public class EmployeeController {
         return jobService.searchJob(positionName);
     }
 }
-
+    @DeleteMapping("/deleteReferral/{id}")
+    public void deleteReferral(@PathVariable Long id){
+       employeeService.deleteReferral(id);        
+    }
 

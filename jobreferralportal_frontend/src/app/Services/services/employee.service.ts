@@ -34,4 +34,8 @@ export class EmployeeService {
   getAllReferredCandidates(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/getAllReferredCandidates`);
   }
+  deleteReferral(referralId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/deleteReferral/${referralId}`);
+  }
 }
+

@@ -1,4 +1,11 @@
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 <div class="container">
+  <div class="search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" placeholder="Search Referred Candidates" [(ngModel)]="searchQuery" (keyup)="searchReferredCandidates()" />
+</div>
   <h2>Referred Candidates</h2>
 
   <div *ngIf="candidates.length === 0 else referredList" class="no-candidates-message">
@@ -11,16 +18,40 @@
       <th>First Name:</th>
       <th>Last Name:</th>
       <th>Years of Experience:</th>
-      <th>Referred By:</th>
+      <th *ngIf="userRole === 'HR'">Referred By:</th>
       <th>Status:</th>
+      <th *ngIf="userRole === 'HR'">Resume:</th>
+     
     </tr>
     <tr *ngFor="let candidate of candidates">
       <td>{{ candidate.referralId }}</td>
       <td>{{ candidate.fname }}</td>
       <td>{{ candidate.lname }}</td>
       <td>{{ candidate.yearsOfExp }}</td>
-      <td>{{ candidate.referredBy }}</td>
-      <td>{{ candidate.status }}</td>
+      <td *ngIf="userRole === 'HR'">{{ candidate.referredBy }}</td>
+      <td>
+        <ng-container *ngIf="userRole === 'HR'; else viewStatus">
+          <select [(ngModel)]="candidate.status" (change)="updateStatus(candidate)">
+            <option *ngFor="let status of statusOptions" [value]="status">
+              {{ status }}
+            </option>
+          </select>
+        </ng-container>
+      
+        <ng-template #viewStatus>
+          {{ candidate.status }} 
+        </ng-template>
+      </td>
+      
+      
+
+      <td *ngIf="userRole === 'HR'">
+        <ng-container >
+          <a (click)="downloadResume(candidate.referralId)">
+            <i class="fa fa-download" aria-hidden="true"></i> 
+          </a>
+        </ng-container>
+      </td>
       
       
     </tr>
