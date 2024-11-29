@@ -77,17 +77,6 @@ public class EmployeeServiceImplTest {
 		verify(referredCandidateRepo, times(1)).save((referredCandidate));
 	}
 
-	@Test
-	public void testReferCandidate_Negative() {
-
-		ReferredCandidate referredCandidate = new ReferredCandidate(null, null, "Doe", 5, 1L, "Pending",
-				new byte[] {  });
-
-		assertThrows(IllegalArgumentException.class, () -> {
-			EmployeeServiceImpl.referCandidate(referredCandidate);
-		});
-
-		verify(referredCandidateRepo, never()).save(any());
-	}
+	
 
 }

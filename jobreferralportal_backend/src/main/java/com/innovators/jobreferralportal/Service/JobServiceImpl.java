@@ -29,7 +29,7 @@ public class JobServiceImpl implements JobService {
     }
     @Override
     public Job addJob(Job jobListing) {
-	 if (jobListing == null) {
+        if (jobListing == null) {
             throw new IllegalArgumentException("Job listing cannot be null");
         }
 
@@ -71,10 +71,10 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<Job> searchJob(String positionName) {
-       return jobRepo.findAllByPositionNameContaining(positionName);
+        return jobRepo.findAllByPositionNameContaining(positionName);
     }
 
-    private List<Job> parseExcelFile(MultipartFile file) throws IOException {
+    protected List<Job> parseExcelFile(MultipartFile file) throws IOException {
         List<Job> jobList = new ArrayList<>();
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);  // Make sure that the data is in the first sheet
@@ -90,7 +90,7 @@ public class JobServiceImpl implements JobService {
             job.setPositionName(currentRow.getCell(0).getStringCellValue());
             job.setJobDescription(currentRow.getCell(1).getStringCellValue());
             job.setDepartmentName(currentRow.getCell(2).getStringCellValue());
-            job.setNumberOfOpenPositions(currentRow.getCell(3).getStringCellValue());
+            job.setNumberOfOpenPositions(String.valueOf((int) currentRow.getCell(3).getNumericCellValue()));
 
             jobList.add(job);
         }

@@ -24,7 +24,26 @@ export class JobService {
   deleteJob(jobId: number): Observable<String> {
     return this.http.delete(`${this.baseUrl}/deleteJob/${jobId}`,{ responseType: 'text' });
   }
-
   
+  uploadBulkJobs(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
 
+    return this.http.post(`${this.baseUrl}/uploadBulkJobs`, formData,{ responseType: 'text' });
+  }
+
+
+  searchJobs(positionName: string): Observable<any> {
+    return this.http.get<any>('/api/employee/search', {
+        params: { positionName: positionName }
+    });
+  }
+
+
+    hrSearchJobs(positionName: string): Observable<any> {
+      return this.http.get<any>('/api/hr/search', {
+          params: { positionName: positionName }
+      });
+
+}
 }
