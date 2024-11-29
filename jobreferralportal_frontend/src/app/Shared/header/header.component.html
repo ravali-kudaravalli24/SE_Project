@@ -3,10 +3,23 @@
   <div class="button-group">
     <button 
       class="view-button" 
-      (click)="getButtonDetails().action()" 
+      (click)="getFirstButtonDetails().action()" 
       *ngIf="isLoggedIn()">
-      {{ getButtonDetails().text }}
+      {{ getFirstButtonDetails().text }}
     </button>
-    <button class="logout-button" *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
+
+    <button 
+      class="view-button" 
+      (click)="getSecondButtonDetails().action()" 
+      *ngIf="isLoggedIn()">
+      {{ getSecondButtonDetails().text }}
+    </button>
+
+    <button 
+      class="logout-button" 
+      *ngIf="isLoggedIn()" 
+      (click)="logout()">
+      Logout
+    </button>
   </div>
 </header>

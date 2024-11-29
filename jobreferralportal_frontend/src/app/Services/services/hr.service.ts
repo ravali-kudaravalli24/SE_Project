@@ -19,5 +19,7 @@ export class HrService {
     return this.http.get(`${this.baseUrl}/getAllReferredCandidates`);
   }
 
-  
+  getLeaderBoard(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/getLeaderBoard`);
+  }
 }
