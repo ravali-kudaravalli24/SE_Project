@@ -22,6 +22,9 @@
           <input [(ngModel)]="newJob.jobDescription" placeholder="Description" required/>
           <input [(ngModel)]="newJob.departmentName" placeholder="Department" required/>
           <input [(ngModel)]="newJob.numberOfOpenPositions" placeholder="Number of Positions" required/>
+          <input [(ngModel)]="newJob.location" placeholder="Location" required/>
+          <input [(ngModel)]="newJob.keywords" placeholder="Keywords" required/>
+      
         </div>
     
         <div class="button-group">
@@ -41,6 +44,9 @@
           <th>Position</th>
           <th>Description</th>
           <th>Department</th>
+        
+          <th>Location</th>
+          <th>Keywords</th>
           <th>Open Positions</th>
           <th></th>
         </tr>
@@ -49,6 +55,9 @@
           <td>{{ job.positionName }}</td>
           <td>{{ job.jobDescription }}</td>
           <td>{{ job.departmentName }}</td>
+       
+          <td>{{job.location}}</td>
+          <td>{{job.keywords}}</td>
           <td>{{ job.numberOfOpenPositions }}</td>
           <td>
             <div class="action-buttons">

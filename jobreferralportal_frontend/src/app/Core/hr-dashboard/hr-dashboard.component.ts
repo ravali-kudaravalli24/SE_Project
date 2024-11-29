@@ -15,7 +15,7 @@ export class HrDashboardComponent implements OnInit {
   leaderBoard: any[] = [];
   showJobModal = false;
   selectedJob: any = null;
-  newJob = { jobId: 0, positionName: '', jobDescription: '' ,departmentName:'',numberOfOpenPositions:0 };
+  newJob = { jobId: 0, positionName: '', jobDescription: '' ,departmentName:'',numberOfOpenPositions:0, location:'',keywords:'' };
   alertMessage: string = '';
   showConfirmationModal = false;
   jobToDeleteId: number | null = null;
@@ -47,7 +47,9 @@ export class HrDashboardComponent implements OnInit {
       positionName: '',
       jobDescription: '',
       departmentName: '',
-      numberOfOpenPositions: 0
+      numberOfOpenPositions: 0,
+      location:'',
+      keywords:''
     }
   }
 
