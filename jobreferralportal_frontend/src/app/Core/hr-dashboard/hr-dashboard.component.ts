@@ -17,7 +17,7 @@ export class HrDashboardComponent implements OnInit {
   showBulkJobModal = false;
   selectedJob: any = null;
   selectedFile: File | null = null;
-  newJob = { jobId: 0, positionName: '', jobDescription: '' ,departmentName:'',numberOfOpenPositions:0 };
+  newJob = { jobId: 0, positionName: '', jobDescription: '' ,departmentName:'',numberOfOpenPositions:0, location:'',keywords:'' };
   alertMessage: string = '';
   fileName: string = '';
   showConfirmationModal = false;
@@ -67,9 +67,12 @@ export class HrDashboardComponent implements OnInit {
       positionName: '',
       jobDescription: '',
       departmentName: '',
-      numberOfOpenPositions: 0
+      numberOfOpenPositions: 0,
+      location:'',
+      keywords:''
     }
   }
+
   uploadFile() {
     if (this.selectedFile) {
       this.jobService.uploadBulkJobs(this.selectedFile).subscribe(

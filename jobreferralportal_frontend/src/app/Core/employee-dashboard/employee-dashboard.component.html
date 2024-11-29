@@ -11,17 +11,20 @@
 
   <div *ngIf="jobs.length === 0; else jobsList" class="no-jobs-message">
       <p>No current openings</p>
-  </div>
-  <ng-template #jobsList>
-      <div class="job-list">
-          <div *ngFor="let job of jobs" class="job-card">
-              <h2>{{ job.positionName }}</h2>
-              <p><strong>JOB ID: </strong> {{ job.jobId }}</p>
-              <p><strong>Description: </strong> {{ job.jobDescription }}</p>
-              <p><strong>Department: </strong> {{ job.departmentName }}</p>
-              <p><strong>Number of open positions: </strong> {{ job.numberOfOpenPositions }}</p>
-              <button (click)="referCandidate(job.jobId)">Refer Candidate</button>
-          </div>
+    </div>
+    <ng-template #jobsList>
+    <div class="job-list">
+      <div *ngFor="let job of jobs" class="job-card">
+        <h2>{{ job.positionName }}</h2>
+        <p><strong>JOB ID: </strong> {{ job.jobId }}</p>
+        <p><strong>Description: </strong> {{ job.jobDescription }}</p>
+        <p><strong>Department: </strong> {{ job.departmentName }} years</p>
+        <p><strong>Location: </strong> {{ job.location }}</p>
+        <p><strong>Keywords: </strong> {{ job.keywords }}</p>
+        <p><strong>Number of open positions: </strong> {{ job.numberOfOpenPositions }}</p>
+        <button (click)="referCandidate(job.jobId)">Refer Candidate</button>
       </div>
-  </ng-template>
-</div>
+    </div>
+    </ng-template>
+  </div>
+  

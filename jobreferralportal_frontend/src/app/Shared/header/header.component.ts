@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../Services/services/auth.service';
@@ -62,8 +63,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   viewReferredCandidates(): void {
+  
     const userRole = this.authService.getUserRole(); 
+   
     if (userRole === 'HR') {
+      console.log('Fetching referred candidates for HR...');
       this.hrService.getAllReferredCandidates().subscribe(
         (data) => {
           console.log('Referred candidates for HR:', data);
@@ -74,6 +78,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       );
     } else if (userRole === 'EMPLOYEE') {
+      console.log('Fetching referred candidates for Employee...');
       this.employeeService.getAllReferredCandidates().subscribe(
         (data) => {
           console.log('Referred candidates for Employee:', data);
@@ -100,14 +105,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   }
 
-  viewDashboard(): void {
-    const userRole = this.authService.getUserRole();
-    if (userRole === 'HR') {
-      this.router.navigate(['/hr-dashboard']);
-    } else if (userRole === 'EMPLOYEE') {
-      this.router.navigate(['/employee-dashboard']);
-    }
-  }
+
 
   getFirstButtonDetails() {
     const currentUrl = this.router.url;
@@ -117,7 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else if (currentUrl.includes('leader-board')) {
       return { text: 'View Referred Candidates', action: this.viewReferredCandidates.bind(this) };
     } else {
-      return { text: 'View Referred Candidates', action: this.viewJobs.bind(this) };
+      return { text: 'View Referred Candidates', action: this.viewReferredCandidates.bind(this)  };
     }
   }
 
@@ -125,7 +123,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const currentUrl = this.router.url;
 
     if (currentUrl.includes('referred-candidates') || currentUrl.includes('leader-board')) {
-      return { text: 'View Jobs', action: this.viewDashboard.bind(this) };
+      return { text: 'View Jobs', action: this.viewJobs.bind(this) };
     } else {
       return { text: 'View Leaderboard', action: this.viewLeaderboard.bind(this) };
     }
