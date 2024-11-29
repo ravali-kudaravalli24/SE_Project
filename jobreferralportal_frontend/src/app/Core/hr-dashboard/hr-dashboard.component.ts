@@ -72,26 +72,7 @@ export class HrDashboardComponent implements OnInit {
       keywords:''
     }
   }
-  uploadFile() {
-    if (this.selectedFile) {
-      this.jobService.uploadBulkJobs(this.selectedFile).subscribe(
-        (response: any) => {
-          this.loadJobs();
-          this.closeBulkJobModal(); 
-        },
-        (error) => {
-          console.error('Error uploading job listings:', error);
-          if (error.status === 400) {
-            this.alertMessage = 'Please upload a valid Excel file.';
-          } else {
-            this.alertMessage = 'Failed to upload job listings. Please try again later.';
-          }
-        }
-      );
-    } else {
-      this.alertMessage = 'Please select a file to upload.';
-    }
-  }
+
   uploadFile() {
     if (this.selectedFile) {
       this.jobService.uploadBulkJobs(this.selectedFile).subscribe(

@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../Services/services/auth.service';
 import { EmployeeService } from '../../Services/services/employee.service';
 import { HrService } from '../../Services/services/hr.service';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
