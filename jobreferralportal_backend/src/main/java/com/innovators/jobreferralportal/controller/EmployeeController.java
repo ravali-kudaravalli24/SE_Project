@@ -80,12 +80,13 @@ public class EmployeeController {
 
 
     @GetMapping("/search")
-    public List<Job> searchJob(@RequestParam String positionName) {
-        return jobService.searchJob(positionName);
+    public List<Job> searchJob(@RequestParam String keyword) {
+        return jobService.searchJob(keyword);
+    }
+
+    @DeleteMapping("/deleteReferral/{id}")
+    public void deleteReferral(@PathVariable Long id) {
+        employeeService.deleteReferral(id);
     }
 }
-    @DeleteMapping("/deleteReferral/{id}")
-    public void deleteReferral(@PathVariable Long id){
-       employeeService.deleteReferral(id);        
-    }
 

@@ -13,15 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JobServiceImpl implements JobService {
 
     @Autowired
     private JobRepo jobRepo;
+
     @Override
     public List<Job> getAllJobs() {
 
@@ -32,6 +32,17 @@ public class JobServiceImpl implements JobService {
         if (jobListing == null) {
             throw new IllegalArgumentException("Job listing cannot be null");
         }
+
+        String keywords = jobListing.getKeywords() == null ? "" : jobListing.getKeywords();
+
+        if (jobListing.getLocation() != null) {
+            keywords += "," + jobListing.getLocation();
+        }
+        if (jobListing.getPositionName() != null) {
+            keywords += "," + jobListing.getPositionName();
+        }
+
+        jobListing.setKeywords(keywords);
 
         return jobRepo.save(jobListing);
     }
@@ -45,6 +56,7 @@ public class JobServiceImpl implements JobService {
         jobForUpdate.setJobDescription(updatedJob.getJobDescription());
         jobForUpdate.setDepartmentName(updatedJob.getDepartmentName());
         jobForUpdate.setNumberOfOpenPositions(updatedJob.getNumberOfOpenPositions());
+        jobForUpdate.setKeywords(updatedJob.getKeywords());
 
         try{
             jobRepo.save(jobForUpdate);
@@ -70,8 +82,8 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<Job> searchJob(String positionName) {
-        return jobRepo.findAllByPositionNameContaining(positionName);
+    public List<Job> searchJob(String keyword) {
+        return jobRepo.findByKeywordsContainingIgnoreCase(keyword);
     }
 
     protected List<Job> parseExcelFile(MultipartFile file) throws IOException {
