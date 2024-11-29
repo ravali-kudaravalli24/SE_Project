@@ -24,7 +24,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.innovators.jobreferralportal.entity.Job;
-import com.innovators.jobreferralportal.entity.ReferredCandidate;
 import com.innovators.jobreferralportal.repository.JobRepo;
 import com.innovators.jobreferralportal.repository.ReferredCandidateRepo;
 
@@ -77,7 +76,7 @@ public class JobServiceImplTest {
 	@Test
 	public void testAddJob_withValidJob_shouldReturnSavedJob() {
 
-		Job job = new Job(1L, "Software Engineer", "Develop software applications", "IT", "3");
+		Job job = new Job(1L, "Software Engineer", "Develop software applications", "IT", "3", "Dallas");
 		when(jobRepo.save(job)).thenReturn(job);
 
 		Job result = jobService.addJob(job);
@@ -100,7 +99,7 @@ public class JobServiceImplTest {
 	@Test
 	public void testAddJob_withJobThatFailsToSave_shouldThrowException() {
 
-		Job jobListing = new Job(1L, "Software Tester", "Tests software applications", "IT", "4");
+		Job jobListing = new Job(1L, "Software Tester", "Tests software applications", "IT", "4","New York");
 		when(jobRepo.save(jobListing)).thenThrow(new RuntimeException("Database error"));
 
 		assertThrows(RuntimeException.class, () -> {
@@ -165,7 +164,7 @@ public class JobServiceImplTest {
 	public void testSearchJob_withValidPositionName_shouldReturnMatchingJobs() {
 		String positionName = "Software";
 		List<Job> expectedJobs = Arrays.asList(job1, job2);
-		when(jobRepo.findAllByPositionNameContaining(positionName)).thenReturn(expectedJobs);
+		when(jobRepo.findByPositionNameContainingIgnoreCaseAndLocationContainingIgnoreCase(positionName, location)).thenReturn(expectedJobs);
 		List<Job> result = jobService.searchJob(positionName);
 		assertEquals(2, result.size());
 		assertTrue(result.contains(job1));
@@ -175,7 +174,7 @@ public class JobServiceImplTest {
 	@Test
 	public void testSearchJob_withInvalidPositionName_shouldReturnEmptyList() {
 		String positionName = "Nonexistent Position";
-		when(jobRepo.findAllByPositionNameContaining(positionName)).thenReturn(Collections.emptyList());
+		when(jobRepo.findByPositionNameContainingIgnoreCaseAndLocationContainingIgnoreCase(positionName,location)).thenReturn(Collections.emptyList());
 
 		List<Job> result = jobService.searchJob(positionName);
 
@@ -185,8 +184,8 @@ public class JobServiceImplTest {
 	@Test
 	public void testGetAllJobs_ReturnsJobs() {
 
-		Job job1 = new Job(1L, "Developer", "Software Developer", "New York", "4");
-		Job job2 = new Job(2L, "Tester", "QA Tester", "Chicago", "5");
+		Job job1 = new Job(1L, "Developer", "Software Developer", "Hybrid Role", "4","New York");
+		Job job2 = new Job(2L, "Tester", "QA Tester", "Remote Job", "5", "Chicago");
 		List<Job> jobList = Arrays.asList(job1, job2);
 
 		when(jobRepo.findAll()).thenReturn(jobList);

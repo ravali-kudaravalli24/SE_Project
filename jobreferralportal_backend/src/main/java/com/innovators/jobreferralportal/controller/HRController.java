@@ -143,8 +143,8 @@ public class HRController {
     }
 
     @GetMapping("/search")
-    public List<Job> searchJob(@RequestParam String positionName) {
-        return jobService.searchJob(positionName);
+    public List<Job> searchJob(@RequestParam String keyword) {
+        return jobService.searchJob(keyword);
     }
 
 

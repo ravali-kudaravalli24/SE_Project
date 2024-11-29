@@ -69,23 +69,47 @@ public class HRServiceImpl implements  HRService{
     @Override
     public List<List<String>> getLeaderBoardList() {
         List<List<String>> res = new ArrayList<>();
-        //get all employee details with descending order of score
+
+
         List<Employee> employeeList = employeeRepo.findAll();
-        //sort them based on score
-       employeeList.sort(Comparator.comparingInt(Employee::getScore).reversed());
-       //create a List of string with only Lname,Fname and score
-        for (Employee e: employeeList){
-            String employeeName = e.getLName() + "," +e.getFName();
-            String score = String.valueOf(e.getScore());
+
+
+        System.out.println("Before sorting:");
+        employeeList.forEach(e -> {
+            System.out.println("ID: " + e.getEmployeeID() + ", Score: " + e.getScore());
+        });
+
+
+        employeeList.sort((e1, e2) -> {
+            Integer score1 = e1.getScore() == null ? 0 : e1.getScore();
+            Integer score2 = e2.getScore() == null ? 0 : e2.getScore();
+            return score2.compareTo(score1); // Descending order
+        });
+
+
+        System.out.println("After sorting:");
+        employeeList.forEach(e -> {
+            System.out.println("ID: " + e.getEmployeeID() + ", Score: " + e.getScore());
+        });
+
+
+        for (Employee e : employeeList) {
+
+            String employeeName = (e.getLName() != null ? e.getLName() : "null") + "," +
+                    (e.getFName() != null ? e.getFName() : "null");
+
+            String score = e.getScore() == null ? "0" : String.valueOf(e.getScore());
+
             String empId = String.valueOf(e.getEmployeeID());
+
             List<String> employeeDetailList = new ArrayList<>();
             employeeDetailList.add(empId);
             employeeDetailList.add(employeeName);
             employeeDetailList.add(score);
             res.add(employeeDetailList);
-            employeeDetailList.clear();
         }
-return res;
+
+        return res;
     }
 
 
