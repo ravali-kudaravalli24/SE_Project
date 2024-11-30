@@ -1,5 +1,5 @@
 # Stage 1: Build the JAR
-FROM maven:3.8.6-openjdk-17 AS builder
+FROM maven:3.8-openjdk-17 AS builder
 
 # Set the working directory for Maven
 WORKDIR /build
