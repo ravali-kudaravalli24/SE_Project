@@ -10,8 +10,8 @@ COPY pom.xml /app/
 # Download dependencies (this helps cache Maven dependencies)
 RUN mvn dependency:go-offline -B
 
-# Copy the rest of the project files
-COPY src /app/src/
+# Copy everything in the backend directory (this includes src/, pom.xml, etc.)
+COPY . /app/
 
 # Build the project using Maven
 RUN mvn package
