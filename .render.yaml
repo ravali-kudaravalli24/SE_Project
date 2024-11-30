@@ -1,5 +1,5 @@
 services:
   - type: web
-    name: job-referral-portal-backend
+    name: job-referral-portal-backend/Dockerfile
     env: docker
     dockerfilePath: Dockerfile
