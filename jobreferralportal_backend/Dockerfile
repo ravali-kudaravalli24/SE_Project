@@ -4,8 +4,14 @@ FROM maven:3.8.5-openjdk-11 as build
 # Set the working directory
 WORKDIR /app
 
-# Copy the project files to the container
-COPY . .
+# Copy only the Maven configuration files first
+COPY pom.xml /app/
+
+# Download dependencies (this helps cache Maven dependencies)
+RUN mvn dependency:go-offline -B
+
+# Copy the rest of the project files
+COPY src /app/src/
 
 # Build the project using Maven
 RUN mvn package
