@@ -76,7 +76,7 @@ public class JobServiceImplTest {
 	@Test
 	public void testAddJob_withValidJob_shouldReturnSavedJob() {
 
-		Job job = new Job(1L, "Software Engineer", "Develop software applications", "IT", "3", "Dallas");
+		Job job = new Job(1L, "Software Engineer", "Develop software applications", "IT", "3", "Dallas","Backend");
 		when(jobRepo.save(job)).thenReturn(job);
 
 		Job result = jobService.addJob(job);
@@ -99,7 +99,7 @@ public class JobServiceImplTest {
 	@Test
 	public void testAddJob_withJobThatFailsToSave_shouldThrowException() {
 
-		Job jobListing = new Job(1L, "Software Tester", "Tests software applications", "IT", "4","New York");
+		Job jobListing = new Job(1L, "Software Tester", "Tests software applications", "IT", "4","New York","Backend");
 		when(jobRepo.save(jobListing)).thenThrow(new RuntimeException("Database error"));
 
 		assertThrows(RuntimeException.class, () -> {
@@ -164,7 +164,7 @@ public class JobServiceImplTest {
 	public void testSearchJob_withValidPositionName_shouldReturnMatchingJobs() {
 		String positionName = "Software";
 		List<Job> expectedJobs = Arrays.asList(job1, job2);
-		when(jobRepo.findByPositionNameContainingIgnoreCaseAndLocationContainingIgnoreCase(positionName, location)).thenReturn(expectedJobs);
+		when(jobRepo.findByKeywordsContainingIgnoreCase(positionName)).thenReturn(expectedJobs);
 		List<Job> result = jobService.searchJob(positionName);
 		assertEquals(2, result.size());
 		assertTrue(result.contains(job1));
@@ -174,7 +174,7 @@ public class JobServiceImplTest {
 	@Test
 	public void testSearchJob_withInvalidPositionName_shouldReturnEmptyList() {
 		String positionName = "Nonexistent Position";
-		when(jobRepo.findByPositionNameContainingIgnoreCaseAndLocationContainingIgnoreCase(positionName,location)).thenReturn(Collections.emptyList());
+		when(jobRepo.findByKeywordsContainingIgnoreCase(positionName)).thenReturn(Collections.emptyList());
 
 		List<Job> result = jobService.searchJob(positionName);
 
@@ -184,8 +184,8 @@ public class JobServiceImplTest {
 	@Test
 	public void testGetAllJobs_ReturnsJobs() {
 
-		Job job1 = new Job(1L, "Developer", "Software Developer", "Hybrid Role", "4","New York");
-		Job job2 = new Job(2L, "Tester", "QA Tester", "Remote Job", "5", "Chicago");
+		Job job1 = new Job(1L, "Developer", "Software Developer", "Hybrid Role", "4","New York","Backend");
+		Job job2 = new Job(2L, "Tester", "QA Tester", "Remote Job", "5", "Chicago","Backend");
 		List<Job> jobList = Arrays.asList(job1, job2);
 
 		when(jobRepo.findAll()).thenReturn(jobList);
