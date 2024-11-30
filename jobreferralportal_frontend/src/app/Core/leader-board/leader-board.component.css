@@ -1,0 +1,43 @@
+.leaderboard-container {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .loading,
+  .error,
+  .empty {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #ff0000;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tr:hover {
+    background-color: #ddd;
+  }
+  
+  .empty {
+    color: #555;
+  }
+  

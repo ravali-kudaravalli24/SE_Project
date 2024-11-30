@@ -29,7 +29,20 @@ export class HrService {
       .set('statusUpdate', statusUpdate)
       .set('id', id.toString());
 
+
+
     return this.http.put(`${this.baseUrl}/updateStatus`, null, { params });
   }
   
+  
+  getLeaderBoard(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/getLeaderBoard`);
+  }
+  searchReferredCandidates(candidateName: string): Observable<any> {
+    return this.http.get<any>('/api/hr/searchCandidates', {
+        params: { positionName: candidateName }
+    });
+  }
+ 
+
 }

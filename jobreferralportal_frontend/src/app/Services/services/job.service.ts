@@ -42,7 +42,7 @@ export class JobService {
 
     hrSearchJobs(positionName: string): Observable<any> {
       return this.http.get<any>('/api/hr/search', {
-          params: { positionName: positionName }
+          params: { keyword: positionName }
       });
 
 }
