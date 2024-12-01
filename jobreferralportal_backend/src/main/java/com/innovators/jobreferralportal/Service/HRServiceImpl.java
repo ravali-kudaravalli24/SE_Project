@@ -117,25 +117,4 @@ public class HRServiceImpl implements  HRService{
         return res;
     }
 
-
-
-//    @Autowired
-//    private BCryptPasswordEncoder passwordEncoder;
-//    @Override
-//    public boolean loginUserHR(String username, String password) {
-//        Optional<Employee> HRByUsername = employeeRepo.findByUsername(username);
-//        if (HRByUsername.isPresent()) {
-//           Employee existingHR = HRByUsername.get();
-//            return passwordEncoder.matches(password, existingHR.getPassword()); // Compare passwords
-//        }
-//        return false;
-//    }
-
-//    @Override
-//    public void addUser(Employee employee) {
-//        String hashedPassword = passwordEncoder.encode(employee.getPassword());
-//        LOGGER.info(hashedPassword);
-//        employee.setPassword(hashedPassword);
-//        employeeRepo.save(employee);
-//    }
 }
