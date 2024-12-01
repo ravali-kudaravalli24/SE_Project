@@ -18,8 +18,8 @@ export class AddUserComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { // Inject Router
     this.addUserForm = this.fb.group({
-      fName: ['', Validators.required],
-      lName: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone_number: ['', Validators.required],
       role: ['', Validators.required],

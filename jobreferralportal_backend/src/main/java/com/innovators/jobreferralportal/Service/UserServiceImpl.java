@@ -15,8 +15,8 @@ public class UserServiceImpl implements UserService {
     public void addUser(Employee employee) {
         // Validate the employee object
         if (employee.getEmployeeID() == null || 
-            employee.getFName() == null || 
-            employee.getLName() == null || 
+            employee.getFirstName() == null ||
+            employee.getLastName() == null ||
             employee.getEmail() == null || 
             employee.getPhone_number() == null || 
             employee.getRole() == null || 

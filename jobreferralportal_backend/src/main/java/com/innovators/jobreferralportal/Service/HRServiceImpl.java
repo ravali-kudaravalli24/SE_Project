@@ -99,8 +99,8 @@ public class HRServiceImpl implements  HRService{
         for (Employee e : employeeList) {
             Integer scoreValue = e.getScore() == null ? 0 : e.getScore();
             if (scoreValue >= 1) { // Check if score is 1 or above
-                String employeeName = (e.getLName() != null ? e.getLName() : "null") + "," +
-                        (e.getFName() != null ? e.getFName() : "null");
+                String employeeName = (e.getLastName() != null ? e.getLastName() : "null") + "," +
+                        (e.getFirstName() != null ? e.getFirstName() : "null");
 
                 String score = String.valueOf(scoreValue); // Convert score to string
                 String empId = String.valueOf(e.getEmployeeID());
