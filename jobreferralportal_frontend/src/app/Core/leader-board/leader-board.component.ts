@@ -56,11 +56,11 @@ export class LeaderBoardComponent implements OnInit {
     }
   }
 
-  mapLeaderboardData(data: any[]): void {
+  mapLeaderboardData(data: string[][]): void {
     this.leaderboard = data.map(item => ({
-      empId: item.empId,
-      name: item.employeeName,
-      score: item.score
+      empId: item[0], // First element is empId
+      name: item[1],  // Second element is employeeName
+      score: item[2]  // Third element is score
     }));
     this.isLoading = false;
   }
