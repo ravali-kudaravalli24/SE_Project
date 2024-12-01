@@ -13,4 +13,5 @@ public interface JobService {
     public void deleteJob(Long id);
     public List<Job> searchJob(String keyword);
     public List<Job> getAllJobs();
+
 }

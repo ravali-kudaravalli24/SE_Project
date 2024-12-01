@@ -105,9 +105,9 @@ public class EmployeeController {
         employeeService.deleteReferral(id);
     }
 
-    @GetMapping("/getLeaderBoard")
+    @GetMapping("/getLeaderBoardEmp")
     public ResponseEntity<List<List<String>>> leaderBoardList(){
-        List<List<String>> leaderBoardList =  hrService.getLeaderBoardList();
+        List<List<String>> leaderBoardList =  employeeService.getLeaderBoardList();
         if (leaderBoardList.isEmpty()){
             return ResponseEntity.noContent().build();
         }else{

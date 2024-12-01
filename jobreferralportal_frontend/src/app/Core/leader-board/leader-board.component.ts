@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { EmployeeService } from '../../Services/services/employee.service';
 import { HrService } from '../../Services/services/hr.service';
+import { AuthService } from '../../Services/services/auth.service'; // Hypothetical service to get roles
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,29 +16,58 @@ export class LeaderBoardComponent implements OnInit {
   isLoading = true; 
   errorMessage = '';
 
-  constructor(private hrService: HrService) {}
+  constructor(
+    private employeeService: EmployeeService,
+    private hrService: HrService,
+    private authService: AuthService // Hypothetical service to check roles
+  ) {}
 
   ngOnInit(): void {
     this.fetchLeaderboard();
   }
 
   fetchLeaderboard(): void {
-    this.hrService.getLeaderBoard().subscribe(
-      (data: any[]) => {
-        console.log('Received leaderboard data:', data);
-        this.leaderboard = data.map(item => ({
-          empId: item.empId, 
-          name: item.employeeName,
-          score: item.score
-        }));
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error fetching leaderboard data:', error);
-        this.errorMessage = 'Failed to load leaderboard. Please try again later.';
-        this.isLoading = false;
-      }
-    );
+    const userRole = this.authService.getUserRole(); // Method to get the user's role
+    if (userRole === 'HR') {
+      // Call HR service
+      this.hrService.getLeaderBoard().subscribe(
+        (data: any[]) => {
+          console.log('HR leaderboard data:', data);
+          this.mapLeaderboardData(data);
+        },
+        (error) => {
+          this.handleError(error);
+        }
+      );
+    } else if (userRole === 'EMPLOYEE') {
+      // Call Employee service
+      this.employeeService.getLeaderBoard().subscribe(
+        (data: any[]) => {
+          console.log('Employee leaderboard data:', data);
+          this.mapLeaderboardData(data);
+        },
+        (error) => {
+          this.handleError(error);
+        }
+      );
+    } else {
+      this.errorMessage = 'Unauthorized access.';
+      this.isLoading = false;
+    }
   }
-  
+
+  mapLeaderboardData(data: any[]): void {
+    this.leaderboard = data.map(item => ({
+      empId: item.empId,
+      name: item.employeeName,
+      score: item.score
+    }));
+    this.isLoading = false;
+  }
+
+  handleError(error: any): void {
+    console.error('Error fetching leaderboard data:', error);
+    this.errorMessage = 'Failed to load leaderboard. Please try again later.';
+    this.isLoading = false;
+  }
 }

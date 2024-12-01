@@ -30,6 +30,9 @@ export class EmployeeService {
     });
     
   }
+  getLeaderBoard(): Observable<any> {
+    return this.http.get<any[]>(`${this.baseUrl}/getLeaderBoardEmp`);
+  }
 
   getAllReferredCandidates(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/getAllReferredCandidates`);

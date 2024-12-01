@@ -13,4 +13,5 @@ public interface EmployeeService {
     public void deleteReferral(Long id);
     public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId);
     public List<ReferredCandidate> getAllReferredCandidatesSearch(Long employeeId, String name);
+    public List<List<String>> getLeaderBoardList();
 }

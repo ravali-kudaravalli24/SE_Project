@@ -35,7 +35,7 @@ export class JobService {
 
   searchJobs(positionName: string): Observable<any> {
     return this.http.get<any>('/api/employee/search', {
-        params: { positionName: positionName }
+        params: { keyword: positionName }
     });
   }
 
