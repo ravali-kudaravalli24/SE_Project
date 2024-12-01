@@ -58,44 +58,46 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<List<String>> getLeaderBoardList() {
 		List<List<String>> res = new ArrayList<>();
 
-
+		// Retrieve all employees from the repository
 		List<Employee> employeeList = employeeRepo.findAll();
-
 
 		System.out.println("Before sorting:");
 		employeeList.forEach(e -> {
 			System.out.println("ID: " + e.getEmployeeID() + ", Score: " + e.getScore());
 		});
 
-
+		// Sort employees by score in descending order
 		employeeList.sort((e1, e2) -> {
 			Integer score1 = e1.getScore() == null ? 0 : e1.getScore();
 			Integer score2 = e2.getScore() == null ? 0 : e2.getScore();
 			return score2.compareTo(score1); // Descending order
 		});
 
-
 		System.out.println("After sorting:");
 		employeeList.forEach(e -> {
 			System.out.println("ID: " + e.getEmployeeID() + ", Score: " + e.getScore());
 		});
 
-
+		// Add employees to the result list only if their score is 1 or above
 		for (Employee e : employeeList) {
+			Integer scoreValue = e.getScore() == null ? 0 : e.getScore();
+			if (scoreValue >= 1) { // Check if score is 1 or above
+				String employeeName = (e.getLName() != null ? e.getLName() : "null") + "," +
+						(e.getFName() != null ? e.getFName() : "null");
 
-			String employeeName = (e.getLName() != null ? e.getLName() : "null") + "," +
-					(e.getFName() != null ? e.getFName() : "null");
+				String score = String.valueOf(scoreValue); // Convert score to string
+				String empId = String.valueOf(e.getEmployeeID());
 
-			String score = e.getScore() == null ? "0" : String.valueOf(e.getScore());
+				List<String> employeeDetailList = new ArrayList<>();
+				employeeDetailList.add(empId);
+				employeeDetailList.add(employeeName);
+				employeeDetailList.add(score);
 
-			String empId = String.valueOf(e.getEmployeeID());
-
-			List<String> employeeDetailList = new ArrayList<>();
-			employeeDetailList.add(empId);
-			employeeDetailList.add(employeeName);
-			employeeDetailList.add(score);
-			res.add(employeeDetailList);
+				res.add(employeeDetailList);
+			}
 		}
+
 		return res;
 	}
+
 }
