@@ -40,6 +40,11 @@ public class HRServiceImpl implements  HRService{
     }
 
     @Override
+    public List<ReferredCandidate> getAllReferredCandidatesSearch(String name){
+        return referredCandidateRepo.findByFirstNameContainingIgnoreCase(name);
+    }
+
+    @Override
     public boolean updateStatus(String status, Long id) {
        Optional<ReferredCandidate> referredCandidate = referredCandidateRepo.findById(id);
        if(referredCandidate.isPresent()){

@@ -1,7 +1,6 @@
 package com.innovators.jobreferralportal.entity;
 
 
-import com.innovators.jobreferralportal.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,8 +14,8 @@ public class ReferredCandidate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long referralId;
-    private String fName;
-    private String lName;
+    private String firstName;
+    private String lastName;
     private int yearsOfExp;
     private Long referredBy;
     private String status;

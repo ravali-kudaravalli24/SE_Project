@@ -8,6 +8,8 @@ import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
 import com.innovators.jobreferralportal.repository.EmployeeRepo;
 import com.innovators.jobreferralportal.repository.ReferredCandidateRepo;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,6 +150,11 @@ public class HRController {
     }
 
 
+    @GetMapping("/searchCandidates")
+    public ResponseEntity<List<ReferredCandidate>> getReferredCandidates(@RequestParam String positionName){
+        List<ReferredCandidate> opList = hrService.getAllReferredCandidatesSearch(positionName);
+        return ResponseEntity.ok(opList);
+    }
 
     // create login for HR
 //     @PostMapping("/loginHR")
