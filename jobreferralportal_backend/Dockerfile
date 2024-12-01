@@ -1,32 +1,32 @@
-# Use Maven image with OpenJDK as the base image
-FROM maven:3.8.5-openjdk-11 as build
+# Stage 1: Build the JAR
+FROM maven:3.8-openjdk-17 AS builder
 
-# Set the working directory
+# Set the working directory for Maven
+WORKDIR /build
+
+# Copy the pom.xml from the backend module
+COPY jobreferralportal_backend/pom.xml ./pom.xml
+
+# Copy the backend source code
+COPY jobreferralportal_backend/src ./src
+
+# Download dependencies and build the application
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run the application
+FROM openjdk:17-jdk-slim
+
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy only the Maven configuration files first
-COPY pom.xml /app/
+# Copy the built JAR file from the builder stage
+COPY --from=builder /build/target/jobreferralportal-0.0.1-SNAPSHOT.jar app.jar
 
-# Download dependencies (this helps cache Maven dependencies)
-RUN mvn dependency:go-offline -B
+# Copy the Oracle Wallet files
+COPY jobreferralportal_backend/src/main/resources/Wallet_ReferralPortalDB /app/Wallet_ReferralPortalDB
 
-# Copy everything in the backend directory (this includes src/, pom.xml, etc.)
-COPY . /app/
+# Expose the application port
+EXPOSE 8090
 
-# Build the project using Maven
-RUN mvn package
-
-# Use a lightweight OpenJDK image for runtime
-FROM openjdk:11-jre-slim
-
-# Set the working directory for the runtime container
-WORKDIR /app
-
-# Copy the built JAR file from the Maven build stage
-COPY --from=build /app/target/*.jar app.jar
-
-# Expose the application port (default is 8080 for Spring Boot)
-EXPOSE 8080
-
-# Set the default command to run the Spring Boot application
+# Run the application
 CMD ["java", "-jar", "app.jar"]
