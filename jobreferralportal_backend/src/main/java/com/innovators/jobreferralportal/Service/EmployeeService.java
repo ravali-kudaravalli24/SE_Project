@@ -12,4 +12,5 @@ public interface EmployeeService {
     public void referCandidate(ReferredCandidate referredCandidate) throws IOException;
     public void deleteReferral(Long id);
     public List<ReferredCandidate> getAllReferredCandidatesByEmployeeId(Long employeeId);
+    public List<ReferredCandidate> getAllReferredCandidatesSearch(Long employeeId, String name);
 }

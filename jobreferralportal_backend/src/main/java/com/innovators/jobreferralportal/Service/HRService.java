@@ -14,5 +14,6 @@ public interface HRService {
     public boolean updateStatus(String status, Long id);
     public void scoreIncrementor(Long id);
     public List<List<String>> getLeaderBoardList();
+    public List<ReferredCandidate> getAllReferredCandidatesSearch(String name);
 
 }

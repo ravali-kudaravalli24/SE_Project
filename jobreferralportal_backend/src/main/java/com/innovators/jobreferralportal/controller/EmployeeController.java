@@ -1,6 +1,7 @@
 package com.innovators.jobreferralportal.controller;
 
 import com.innovators.jobreferralportal.Service.EmployeeService;
+import com.innovators.jobreferralportal.Service.HRService;
 import com.innovators.jobreferralportal.Service.JobService;
 import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.entity.ReferredCandidate;
@@ -25,6 +26,8 @@ public class EmployeeController {
     @Autowired
     JobService jobService;
     @Autowired
+    private HRService hrService;
+    @Autowired
     private EmployeeService employeeService;
 
     @PostMapping("/referCandidate")
@@ -36,8 +39,8 @@ public class EmployeeController {
     // now creating referred candidate object
         try {
             ReferredCandidate candidate = ReferredCandidate.builder()
-                    .fName(fName)
-                    .lName(lName)
+                    .firstName(fName)
+                    .lastName(lName)
                     .yearsOfExp(yearsOfExp)
                     .referredBy((long) referredBy)
                     .resume(resume.getBytes())
@@ -77,6 +80,19 @@ public class EmployeeController {
         return ResponseEntity.ok(opList);
     }
 
+    @GetMapping("/searchCandidates")
+    public ResponseEntity<List<ReferredCandidate>> getReferredCandidates(@RequestParam String positionName,
+                                                                         HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Long employeeId = (Long) session.getAttribute("employeeID");
+
+        if (employeeId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        List<ReferredCandidate> opList = employeeService.getAllReferredCandidatesSearch(employeeId, positionName);
+        return ResponseEntity.ok(opList);
+    }
 
 
     @GetMapping("/search")
@@ -87,6 +103,16 @@ public class EmployeeController {
     @DeleteMapping("/deleteReferral/{id}")
     public void deleteReferral(@PathVariable Long id) {
         employeeService.deleteReferral(id);
+    }
+
+    @GetMapping("/getLeaderBoard")
+    public ResponseEntity<List<List<String>>> leaderBoardList(){
+        List<List<String>> leaderBoardList =  hrService.getLeaderBoardList();
+        if (leaderBoardList.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.ok(leaderBoardList);
+        }
     }
 }
 
