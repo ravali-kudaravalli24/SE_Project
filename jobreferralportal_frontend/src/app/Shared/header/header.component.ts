@@ -1,4 +1,3 @@
-
 import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../Services/services/auth.service';
 import { HrService } from '../../Services/services/hr.service';
@@ -7,16 +6,14 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   standalone: true,
-  imports:[CommonModule]
+  imports: [CommonModule]
 })
 
-    
 export class HeaderComponent implements OnInit, OnDestroy {
   userRole: string | null = null;
   private roleSubscription: Subscription | null = null;
@@ -45,17 +42,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.roleSubscription) {
       this.roleSubscription.unsubscribe(); 
     }
-
   }
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }
 
-
+  // Add User button action
+  addUser(): void {
+    if (this.userRole === 'HR') {
+      console.log('Navigating to Add User page for HR...');
+      this.router.navigate(['/addUsers']);
+    }
+  }
 
   viewReferredCandidates(): void {
-  
     const userRole = this.authService.getUserRole(); 
    
     if (userRole === 'HR') {
@@ -83,7 +84,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-
   viewLeaderboard(): void {
     this.router.navigate(['/leader-board']);
   }
@@ -91,49 +91,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
   viewJobs(): void {
     const userRole = this.authService.getUserRole(); 
     if (userRole === 'HR')
-    this.router.navigate(['/hr-dashboard']);
-  else
-  this.router.navigate(['/employee-dashboard']);
-
+      this.router.navigate(['/hr-dashboard']);
+    else
+      this.router.navigate(['/employee-dashboard']);
   }
 
-
-
   getFirstButtonDetails() {
-    const currentUrl = this.router.url;
-
-    if (currentUrl.includes('referred-candidates')) {
-      return { text: 'View Leaderboard', action: this.viewLeaderboard.bind(this) };
-    } else if (currentUrl.includes('leader-board')) {
-      return { text: 'View Referred Candidates', action: this.viewReferredCandidates.bind(this) };
-    } else {
-      return { text: 'View Referred Candidates', action: this.viewReferredCandidates.bind(this)  };
-    }
+      return { text: 'View Jobs', action: this.viewJobs.bind(this) };
   }
 
   getSecondButtonDetails() {
-    const currentUrl = this.router.url;
 
-    if (currentUrl.includes('referred-candidates') || currentUrl.includes('leader-board')) {
-      return { text: 'View Jobs', action: this.viewJobs.bind(this) };
-    } else {
       return { text: 'View Leaderboard', action: this.viewLeaderboard.bind(this) };
-    }
+    
   }
 
+  getThirdButtonDetails() {
+      return { text: 'View Referred Candidates', action: this.viewReferredCandidates.bind(this) };
     
+  }
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']); 
   }
 
-  
   navigateTo(route: string) {
     this.router.navigate([`/${route}`]);
   }
-
-  get currentUrl(): string {
-    return this.router.url;
-
-  }
+  
 }

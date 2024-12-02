@@ -3,6 +3,13 @@
   <div class="button-group">
     <button 
       class="view-button" 
+      *ngIf="isLoggedIn() && userRole === 'HR'" 
+      (click)="addUser()">
+      Add User
+    </button>
+    
+    <button 
+      class="view-button" 
       (click)="getFirstButtonDetails().action()" 
       *ngIf="isLoggedIn()">
       {{ getFirstButtonDetails().text }}
@@ -15,6 +22,14 @@
       {{ getSecondButtonDetails().text }}
     </button>
 
+    <!-- Third Button -->
+    <button 
+      class="view-button" 
+      (click)="getThirdButtonDetails().action()" 
+      *ngIf="isLoggedIn()">
+      {{ getThirdButtonDetails().text }}
+    </button>
+
     <button 
       class="logout-button" 
       *ngIf="isLoggedIn()" 
@@ -22,5 +37,4 @@
       Logout
     </button>
   </div>
- 
 </header>
