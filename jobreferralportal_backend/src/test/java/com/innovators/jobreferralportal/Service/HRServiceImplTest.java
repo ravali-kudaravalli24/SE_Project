@@ -3,12 +3,14 @@ package com.innovators.jobreferralportal.Service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -26,20 +28,21 @@ import com.innovators.jobreferralportal.repository.EmployeeRepo;
 import com.innovators.jobreferralportal.repository.JobRepo;
 import com.innovators.jobreferralportal.repository.ReferredCandidateRepo;
 
-import io.jsonwebtoken.lang.Arrays;
+import jakarta.persistence.EntityNotFoundException;
 
 public class HRServiceImplTest {
 
 	@InjectMocks
-	private HRServiceImpl yourService; 
-	
+	private HRServiceImpl yourService;
+
 	@Mock
 	private ReferredCandidateRepo referredCandidateRepo;
 	@Mock
 	private EmployeeRepo employeeRepo;
 	@Mock
 	private JobRepo jobRepo;
-	
+	List<Employee> employeeList = new ArrayList<>();
+
 	@BeforeEach
 	public void setUp() {
 		MockitoAnnotations.openMocks(this);
@@ -99,31 +102,143 @@ public class HRServiceImplTest {
 		assertFalse(result);
 		verify(referredCandidateRepo, times(1)).findById(id);
 	}
-//	@Test
-//    public void testGetLeaderBoardList_Success() {
-//        // Arrange: Mock employee data
-//       
-//        Employee emp1 = new Employee(1l,"Ramya","rao","ramya.doe@example.com","123-456-7890",RoleEnum.EMPLOYEE,"Software Developer","johndoe","password123",85);
-//        Employee emp2 = new Employee(1l,"Sravan","Kumar","sravan.doe@example.com","123-456-7890",RoleEnum.EMPLOYEE,"Software Developer","johndoe","password123",85);
-//        Employee emp3 = new Employee(1l,"Anudeep","Rao","anudeep.doe@example.com","123-456-7890",RoleEnum.EMPLOYEE,"Software Developer","johndoe","password123",85);
-//        List<Employee> employees =new ArrayList<>();
-//        employees.add(emp1);
-//        employees.add(emp2);
-//        employees.add(emp3);
-//        
-//
-//        // Mock the repository to return the employees list
-//        when(employeeRepo.findAll()).thenReturn(employees);
-//
-//        // Act: Call the method under test
-//        List<List<String>> leaderBoard = yourService.getLeaderBoardList();
-//System.out.println(leaderBoard);
-//        // Assert: Verify the leaderboard is sorted by score in descending order
-//        assertNotNull(leaderBoard);
-//        assertEquals(2, leaderBoard.size());  // We have 3 employees
-//        assertEquals(1l, leaderBoard.get(0).get(0));  // Employee with ID 2 (Jane Smith) should be first
-//        assertEquals("Ramya", leaderBoard.get(0).get(1));  // Name should be "Jane,Smith"
-//        assertEquals("rao", leaderBoard.get(0).get(2));  // Score should be 92
-//
-//           }
+
+	@Test
+	public void testGetAllReferredCandidatesSearch_FoundCandidates() {
+
+		ReferredCandidate candidate1 = new ReferredCandidate();
+		candidate1.setFirstName("Ramya");
+
+		ReferredCandidate candidate2 = new ReferredCandidate();
+		candidate2.setFirstName("Rishika");
+
+		List<ReferredCandidate> expectedCandidates = Arrays.asList(candidate1, candidate2);
+
+		when(referredCandidateRepo.findByFirstNameContainingIgnoreCase("ri")).thenReturn(expectedCandidates);
+
+		List<ReferredCandidate> actualCandidates = yourService.getAllReferredCandidatesSearch("ri");
+
+		assertNotNull(actualCandidates);
+		assertEquals(2, actualCandidates.size());
+		assertTrue(actualCandidates.stream().anyMatch(c -> c.getFirstName().equals("Rishika")));
+		assertTrue(actualCandidates.stream().anyMatch(c -> c.getFirstName().equals("Ramya")));
+		verify(referredCandidateRepo, times(1)).findByFirstNameContainingIgnoreCase("ri");
+	}
+
+	@Test
+	public void testGetAllReferredCandidatesSearch_NoCandidatesFound() {
+
+		when(referredCandidateRepo.findByFirstNameContainingIgnoreCase("randomuser"))
+				.thenReturn(Collections.emptyList());
+
+		List<ReferredCandidate> actualCandidates = yourService.getAllReferredCandidatesSearch("randomuser");
+
+		assertNotNull(actualCandidates);
+		assertTrue(actualCandidates.isEmpty());
+
+		verify(referredCandidateRepo, times(1)).findByFirstNameContainingIgnoreCase("randomuser");
+	}
+
+	@Test
+	public void testGetLeaderBoardList_ValidEmployees() {
+
+		Employee emp1 = new Employee();
+		emp1.setEmployeeID(1L);
+		emp1.setFirstName("Ramya");
+		emp1.setLastName("Madhavareddy");
+		emp1.setScore(10);
+
+		Employee emp2 = new Employee();
+		emp2.setEmployeeID(2L);
+		emp2.setFirstName("Rishika");
+		emp2.setLastName("Dudipala");
+		emp2.setScore(5);
+
+		Employee emp3 = new Employee();
+		emp3.setEmployeeID(3L);
+		emp3.setFirstName("Sravan");
+		emp3.setLastName("Nadipalli");
+		emp3.setScore(8);
+
+		employeeList.add(emp1);
+		employeeList.add(emp2);
+		employeeList.add(emp3);
+
+		when(employeeRepo.findAll()).thenReturn(employeeList);
+		List<List<String>> leaderBoard = yourService.getLeaderBoardList();
+
+		assertEquals(3, leaderBoard.size());
+		assertEquals("1", leaderBoard.get(0).get(0));
+		assertEquals("Madhavareddy,Ramya", leaderBoard.get(0).get(1));
+		assertEquals("10", leaderBoard.get(0).get(2));
+
+		assertEquals("3", leaderBoard.get(1).get(0));
+		assertEquals("Nadipalli,Sravan", leaderBoard.get(1).get(1));
+		assertEquals("8", leaderBoard.get(1).get(2));
+
+		assertEquals("2", leaderBoard.get(2).get(0));
+		assertEquals("Dudipala,Rishika", leaderBoard.get(2).get(1));
+		assertEquals("5", leaderBoard.get(2).get(2));
+	}
+
+	@Test
+	public void testGetLeaderBoardList_ScoreLessThanOne() {
+
+		Employee emp1 = new Employee();
+		emp1.setEmployeeID(1L);
+		emp1.setFirstName("John");
+		emp1.setLastName("Doe");
+		emp1.setScore(0);
+
+		employeeList.add(emp1);
+
+		when(employeeRepo.findAll()).thenReturn(employeeList);
+
+		List<List<String>> leaderBoard = yourService.getLeaderBoardList();
+
+		assertTrue(leaderBoard.isEmpty(), "Leaderboard should be empty when score is less than 1");
+	}
+
+	@Test
+	public void testScoreIncrementor_Success() {
+		Long referralId = 1L;
+		Long referredById = 2L;
+
+		ReferredCandidate referredCandidate = new ReferredCandidate();
+
+		referredCandidate.setReferredBy(referredById);
+
+		Employee employee = new Employee();
+		employee.setEmployeeID(referredById);
+		employee.setScore(10);
+		when(referredCandidateRepo.getReferenceById(referralId)).thenReturn(referredCandidate);
+		when(employeeRepo.getReferenceById(referredById)).thenReturn(employee);
+
+		yourService.scoreIncrementor(referralId);
+		assertEquals(11, employee.getScore());
+
+		verify(referredCandidateRepo, times(1)).getReferenceById(referralId);
+		verify(employeeRepo, times(1)).getReferenceById(referredById);
+	}
+
+	@Test
+	public void testScoreIncrementor_EmployeeNotFound() {
+
+		Long referralId = 1L;
+
+		ReferredCandidate referredCandidate = new ReferredCandidate();
+
+		referredCandidate.setReferredBy(2L);
+
+		when(referredCandidateRepo.getReferenceById(referralId)).thenReturn(referredCandidate);
+		when(employeeRepo.getReferenceById(2L)).thenThrow(new EntityNotFoundException("Employee not found"));
+
+		assertThrows(EntityNotFoundException.class, () -> {
+			yourService.scoreIncrementor(referralId);
+		});
+
+		verify(referredCandidateRepo, times(1)).getReferenceById(referralId);
+		verify(employeeRepo, times(1)).getReferenceById(2L);
+	}
+
 }
