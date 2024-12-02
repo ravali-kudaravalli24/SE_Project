@@ -1,6 +1,7 @@
 package com.innovators.jobreferralportal.Service;
 
 
+
 import com.innovators.jobreferralportal.entity.Job;
 import com.innovators.jobreferralportal.repository.JobRepo;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,20 +35,20 @@ public class JobServiceImpl implements JobService {
             throw new IllegalArgumentException("Job listing cannot be null");
         }
 
-        String keywords = jobListing.getKeywords() == null ? "" : jobListing.getKeywords();
-
-        if (jobListing.getLocation() != null) {
-            keywords += "," + jobListing.getLocation();
-        }
-        if (jobListing.getPositionName() != null) {
-            keywords += "," + jobListing.getPositionName();
-        }
-
-        jobListing.setKeywords(keywords);
-
         return jobRepo.save(jobListing);
     }
 
+    private void updateKeywords(Job job){
+        String keywords = job.getKeywords() == null ? "" : job.getKeywords();
+
+        if (job.getLocation() != null) {
+            keywords += "," + job.getLocation();
+        }
+        if (job.getPositionName() != null) {
+            keywords += "," + job.getPositionName();
+        }
+        job.setKeywords(keywords);
+    }
     @Override
     public boolean updateJob(Long id, Job updatedJob) {
         //get Job based on id
@@ -88,7 +90,8 @@ public class JobServiceImpl implements JobService {
 
     protected List<Job> parseExcelFile(MultipartFile file) throws IOException {
         List<Job> jobList = new ArrayList<>();
-        Workbook workbook = WorkbookFactory.create(file.getInputStream());
+        InputStream inputStream = file.getInputStream();
+        Workbook workbook = WorkbookFactory.create(inputStream);
         Sheet sheet = workbook.getSheetAt(0);  // Make sure that the data is in the first sheet
         Iterator<Row> rows = sheet.iterator();
 
@@ -103,7 +106,9 @@ public class JobServiceImpl implements JobService {
             job.setJobDescription(currentRow.getCell(1).getStringCellValue());
             job.setDepartmentName(currentRow.getCell(2).getStringCellValue());
             job.setNumberOfOpenPositions(String.valueOf((int) currentRow.getCell(3).getNumericCellValue()));
-
+            job.setLocation(currentRow.getCell(4).getStringCellValue());
+            job.setKeywords(currentRow.getCell(5).getStringCellValue());
+            updateKeywords(job);
             jobList.add(job);
         }
 
