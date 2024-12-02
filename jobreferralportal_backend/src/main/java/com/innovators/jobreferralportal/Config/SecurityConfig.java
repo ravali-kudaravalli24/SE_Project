@@ -55,6 +55,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:4200"); // Replace with your frontend origin
+        config.addAllowedOrigin("https://se-project-frontend-rua3.onrender.com");
         config.addAllowedMethod("*");  // Allows all HTTP methods
         config.addAllowedHeader("*");  // Allows all headers
 
