@@ -42,6 +42,21 @@ export class ReferredCandidatesComponent implements OnInit {
     } 
   }
 
+ 
+  withdrawReferral(referralId: number) {
+    if (confirm('Are you sure you want to delete this referral?')) {
+      this.employeeService.deleteReferral(referralId).subscribe(() => {
+      
+      this.employeeService.getAllReferredCandidates().subscribe({
+        next: (data) => this.candidates = data,
+        error: (error) => console.error('Error fetching candidates', error)
+      });
+  
+     
+      });
+    }
+  }
+
   downloadResume(candidateId: number): void {
     this.hrService.downloadResume(candidateId).subscribe(
       (response: any) => {
@@ -88,14 +103,34 @@ export class ReferredCandidatesComponent implements OnInit {
 
   searchReferredCandidates(): void {
     if (this.searchQuery) {
-      this.hrService.searchReferredCandidates(this.searchQuery).subscribe((data: any[]) => {
-        this.candidates = data;
-      });
+      if(this.userRole==='HR')
+      {
+        this.hrService.searchReferredCandidates(this.searchQuery).subscribe((data: any[]) => {
+          this.candidates = data;
+        });
+      }
+      else{
+        this.employeeService.searchReferredCandidates(this.searchQuery).subscribe((data: any[]) => {
+          this.candidates = data;
+        });
+
+      }
+      
     } else {
+      if(this.userRole==='HR')
+        {
         this.hrService.getAllReferredCandidates().subscribe({
           next: (data) => this.candidates = data,
           error: (error) => console.error('Error fetching candidates', error)
         });
+      }
+   else{
+    this.employeeService.getAllReferredCandidates().subscribe({
+      next: (data) => this.candidates = data,
+      error: (error) => console.error('Error fetching candidates', error)
+    });
+
+   }
       
     }
   }

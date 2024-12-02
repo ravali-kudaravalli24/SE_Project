@@ -34,11 +34,20 @@ export class EmployeeService {
     return this.http.get<any[]>(`${this.baseUrl}/getLeaderBoardEmp`);
   }
 
+ 
+
   getAllReferredCandidates(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/getAllReferredCandidates`);
   }
+
   deleteReferral(referralId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/deleteReferral/${referralId}`);
+  }
+
+  searchReferredCandidates(candidateName: string): Observable<any> {
+    return this.http.get<any>('/api/employee/searchCandidates', {
+        params: { positionName: candidateName }
+    });
   }
 }
 

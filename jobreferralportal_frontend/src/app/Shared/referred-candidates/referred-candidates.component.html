@@ -21,6 +21,7 @@
       <th *ngIf="userRole === 'HR'">Referred By:</th>
       <th>Status:</th>
       <th *ngIf="userRole === 'HR'">Resume:</th>
+      <th *ngIf="userRole === 'EMPLOYEE'">Withdaw</th>
      
     </tr>
     <tr *ngFor="let candidate of candidates">
@@ -42,6 +43,8 @@
           {{ candidate.status }} 
         </ng-template>
       </td>
+
+      <td *ngIf="userRole === 'EMPLOYEE'"><button (click)="withdrawReferral(candidate.referralId )"> withdraw</button></td>
       
       
 
